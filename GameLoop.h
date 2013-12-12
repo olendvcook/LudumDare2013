@@ -21,8 +21,7 @@ private:
 	sf::RenderWindow mWindow;
 	Textures mSpriteSheet;
 	sf::Sprite gameOver;
-	sf::Music song;
-
+	
 	sf::View mView;
 
 public:
