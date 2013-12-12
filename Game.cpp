@@ -242,13 +242,13 @@ void Game::input(sf::Event *pEvent)
 		}
 		break;
 	case(sf::Event::KeyReleased):
-		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || !sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 			mPlayer.setIsLeft(false);
-		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || !sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 			mPlayer.setIsRight(false);
-		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || !sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 			mPlayer.setIsDown(false);
-		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || !sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 			mPlayer.setIsUp(false);
 		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 			mPlayer.setIsAttacking(false);

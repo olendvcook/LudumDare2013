@@ -21,6 +21,7 @@ private:
 	sf::RenderWindow mWindow;
 	Textures mSpriteSheet;
 	sf::Sprite gameOver;
+
 	
 	sf::View mView;
 
