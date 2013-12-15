@@ -5,9 +5,8 @@
 GameLoop::GameLoop(void) :
 	mTextureHolder()
 {
+	mWindow.setVerticalSyncEnabled(true);
 	loop();
-	mWindow.setVerticalSyncEnabled(false);
-	mWindow.setFramerateLimit(60);
 }
 
 
@@ -40,7 +39,7 @@ void GameLoop::loop()
 	while (mWindow.isOpen())
 	{
 		loops = 0;
-		mWindow.clear(sf::Color(255,0,255,255));
+		mWindow.clear();
 
 		sf::Event event;
 
@@ -66,6 +65,7 @@ void GameLoop::loop()
 			nextGameTick += SKIP_TICKS;
 			loops++;
 		}
+		
 
 		//Input Here
 		while (mWindow.pollEvent(event))
@@ -108,16 +108,17 @@ void GameLoop::loop()
 		interpolation = float(clock.getElapsedTime().asMilliseconds() + SKIP_TICKS - nextGameTick)
 			/ float(SKIP_TICKS);
 
-		mWindow.setView(mView);
-
 		gameOver.setPosition(mView.getCenter().x - WindowWidth/2, mView.getCenter().y - WindowHeight/2);
+
 		//draw methods here
 		switch(mGameState)
 		{
 		case(gMENU):
+			mWindow.setView(mWindow.getDefaultView());
 			mMenu.draw(&mWindow);
 			break;
 		case(gGAME):
+			mWindow.setView(mView);
 			mGame.draw(&mWindow, interpolation);
 			break;
 		case(gGAMEOVER):
@@ -138,5 +139,6 @@ void GameLoop::loop()
 		}
 
 		mWindow.display();
+		
 	}
 }

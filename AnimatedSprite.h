@@ -63,4 +63,5 @@ public:
 	virtual void setPosition(float pX, float pY) { mPosition = sf::Vector2f(pX,pY); };
 	virtual void setPosition(sf::Vector2f pPosition) { mPosition = pPosition; };
 	virtual void revertPosition() { mPosition = mOldPosition; }
+	virtual sf::Vector2f getOldPosition() { return mOldPosition; }
 };

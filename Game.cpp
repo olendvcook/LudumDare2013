@@ -21,7 +21,7 @@ Game::Game(Textures *pTextureHolder,  sf::View * pView) :
 	*/
 
 	mView->reset(sf::FloatRect(0,0,WindowWidth,WindowHeight));
-	//mView->zoom(0.5f);
+	mView->zoom(0.5f);
 	mView->setCenter(mPlayer.getPosition());
 }
 
@@ -48,25 +48,26 @@ Game::~Game(void)
 //left in as example
 void Game::update()
 {
-	//mView->setCenter(static_cast<int>(mPlayer.getPosition().x),static_cast<int>(mPlayer.getPosition().y));
-	mView->move(mPlayer.getVelocity().x,mPlayer.getVelocity().y);
+
+	mView->setCenter(static_cast<int>(mPlayer.getOldPosition().x),static_cast<int>(mPlayer.getOldPosition().y));
 
 	if(mView->getCenter().x < mView->getSize().x/2)
 	{
 		mView->setCenter(static_cast<int>(mView->getSize().x/2), static_cast<int>(mView->getCenter().y));
 	}
+	else if(mView->getCenter().x > mMap.getCurrentRoom()->getRoomWidth() * 32 - mView->getSize().x/2)
+	{
+		mView->setCenter(static_cast<int>(mMap.getCurrentRoom()->getRoomWidth() * 32 - mView->getSize().x/2), static_cast<int>(mView->getCenter().y));
+	}
 	if(mView->getCenter().y < mView->getSize().y/2)
 	{
 		mView->setCenter(static_cast<int>(mView->getCenter().x), static_cast<int>(mView->getSize().y/2));
 	}
-	if(mView->getCenter().x > 32 * 32 - mView->getSize().x/2)
+	else if(mView->getCenter().y > mMap.getCurrentRoom()->getRoomHeight() * 32 - mView->getSize().y/2)
 	{
-		mView->setCenter(static_cast<int>(32 * 32 - mView->getSize().x/2), static_cast<int>(mView->getCenter().y));
+		mView->setCenter(static_cast<int>(mView->getCenter().x), static_cast<int>(mMap.getCurrentRoom()->getRoomHeight() * 32 - mView->getSize().y/2));
 	}
-	if(mView->getCenter().y > 32 * 32 - mView->getSize().y/2)
-	{
-		mView->setCenter(static_cast<int>(mView->getCenter().x), static_cast<int>(32 * 32 - mView->getSize().y/2));
-	}
+	
 
 	for(int i = 0; i < mMap.getCurrentRoom()->getEnemyAmount(); i++)
 	{	
@@ -97,6 +98,7 @@ void Game::update()
 	}
 
 	mPlayer.update();
+
 }
 
 //just call draw of all entities
