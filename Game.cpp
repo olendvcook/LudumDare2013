@@ -100,6 +100,29 @@ void Game::update()
 
 	mPlayer.update();
 
+
+	//check for room switch
+	if(mPlayer.getPosition().x < 0)
+	{
+		mMap.setCurrentRoom(LEFT);
+		mPlayer.setPosition((mMap.getCurrentRoom()->getRoomWidth() * mMap.getCurrentRoom()->getTileSize().x) - mPlayer.getSize().x/2, mPlayer.getPosition().y);
+	}
+	else if (mPlayer.getPosition().y < 0)
+	{
+		mMap.setCurrentRoom(UP);
+		mPlayer.setPosition(mPlayer.getPosition().x, (mMap.getCurrentRoom()->getRoomHeight() * mMap.getCurrentRoom()->getTileSize().y) - mPlayer.getSize().y/2);
+	}
+	else if (mPlayer.getPosition().x > (mMap.getCurrentRoom()->getRoomWidth() * mMap.getCurrentRoom()->getTileSize().x))
+	{
+		mMap.setCurrentRoom(RIGHT);
+		mPlayer.setPosition(mPlayer.getSize().x/2, mPlayer.getPosition().y);
+	}
+	else if (mPlayer.getPosition().y > (mMap.getCurrentRoom()->getRoomHeight() * mMap.getCurrentRoom()->getTileSize().y))
+	{
+		mMap.setCurrentRoom(DOWN);
+		mPlayer.setPosition(mPlayer.getPosition().x, mPlayer.getSize().y/2);
+	}
+
 }
 
 //just call draw of all entities
