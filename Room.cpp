@@ -65,7 +65,7 @@ void Room::addEnemy(float pXpos, float pYpos)
 {
 	//if no delete before removed u get memory leaks
 	//if you ever call new you MUST call delete later
-	mEnemies.insert(mEnemies.begin(), new Enemy(sf::Vector2f(pXpos, pYpos), sf::Vector2i(32,32), (mTextureHolder->getTexture(sGHOST))));
+	mEnemies.insert(mEnemies.begin(), new Enemy(sf::Vector2f(pXpos, pYpos), sf::Vector2i(32,32), (mTextureHolder->getTexture(sZOMBIE))));
 }
 
 void Room::removeEnemy(int pIndex)

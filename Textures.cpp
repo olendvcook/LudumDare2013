@@ -12,6 +12,7 @@ Textures::Textures(void)
 	texture1.loadFromFile("Assets/buttonSheet.png");
 	mSheets.insert(mSheets.end(), texture1);
 	*/
+	
 
 	texture1.loadFromFile("Assets/buttonSheet.png");
 	mSheets.insert(mSheets.end(), texture1);
@@ -19,16 +20,31 @@ Textures::Textures(void)
 	texture1.loadFromFile("Assets/playerSheet.png");
 	mSheets.insert(mSheets.end(), texture1);
 
-	texture1.loadFromFile("Assets/background.png");
+	texture1.loadFromFile("Assets/spacezombie.png");
+	mSheets.insert(mSheets.end(), texture1);
+
+	texture1.loadFromFile("Assets/battery.png");
+	mSheets.insert(mSheets.end(), texture1);
+
+	texture1.loadFromFile("Assets/engine.png");
+	mSheets.insert(mSheets.end(), texture1);
+
+	texture1.loadFromFile("Assets/laser.png");
+	mSheets.insert(mSheets.end(), texture1);
+
+	texture1.loadFromFile("Assets/batterymeter.png");
+	mSheets.insert(mSheets.end(), texture1);
+
+	texture1.loadFromFile("Assets/healthmeter.png");
+	mSheets.insert(mSheets.end(), texture1);
+
+	texture1.loadFromFile("Assets/hologramborder.png");
+	mSheets.insert(mSheets.end(), texture1);
+
+	texture1.loadFromFile("Assets/titlebackground.png");
 	mSheets.insert(mSheets.end(), texture1);
 
 	texture1.loadFromFile("Assets/gameover.png");
-	mSheets.insert(mSheets.end(), texture1);
-
-	texture1.loadFromFile("Assets/ghostsheet.png");
-	mSheets.insert(mSheets.end(), texture1);
-
-	texture1.loadFromFile("Assets/gametile.png");
 	mSheets.insert(mSheets.end(), texture1);
 
 	texture1.loadFromFile("Assets/paused.png");
@@ -38,6 +54,12 @@ Textures::Textures(void)
 	mSheets.insert(mSheets.end(), texture1);
 
 	texture1.loadFromFile("Assets/wall.png");
+	mSheets.insert(mSheets.end(), texture1);
+
+	texture1.loadFromFile("Assets/titlerobot.png");
+	mSheets.insert(mSheets.end(), texture1);
+
+	texture1.loadFromFile("Assets/titlespaceship.png");
 	mSheets.insert(mSheets.end(), texture1);
 	
 }

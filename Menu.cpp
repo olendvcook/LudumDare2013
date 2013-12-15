@@ -13,7 +13,7 @@ Menu::Menu(Textures *pTextureHolder)
 	mButtons.insert(mButtons.begin(), Button(sf::Vector2i(WindowWidth/2 - 100,300), sf::Vector2i(400, 182), pTextureHolder->getTexture(sBUTTONS), bCREDITS));
 	mButtons.insert(mButtons.begin(), Button(sf::Vector2i(WindowWidth/2 - 100,300), sf::Vector2i(400, 182), pTextureHolder->getTexture(sBUTTONS), bBACK));
 
-	mBackground.setTexture(*pTextureHolder->getTexture(sBACKGROUND));
+	mBackground.setTexture(*pTextureHolder->getTexture(sTITLEBACKGROUND));
 	mBackground.setPosition(0,0);
 	//set origin to middle of sprite to rotate around middle
 	mBackground.setOrigin(400, 400);

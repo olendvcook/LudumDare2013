@@ -75,10 +75,10 @@ titlebackground.png
 	
 	space background
 
-titlecs-499.png (size idk)
+titlerobot.png (size idk)
 	have CS-499 mining spacerock (would be cool if animated)
 
-titlesk-27.png (size idk)
+titlespaceship.png (size idk)
 	SK-27 floating in the background (maybe animated flashing lights)
 
 	titlecs-499.png and titlesk-27.png are going to be placed on titlebackground and moved around a bit to produce a floating effect
