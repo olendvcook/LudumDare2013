@@ -6,7 +6,8 @@ GameLoop::GameLoop(void) :
 	mTextureHolder()
 {
 	loop();
-	mWindow.setVerticalSyncEnabled(true);
+	mWindow.setVerticalSyncEnabled(false);
+	mWindow.setFramerateLimit(60);
 }
 
 
@@ -39,7 +40,7 @@ void GameLoop::loop()
 	while (mWindow.isOpen())
 	{
 		loops = 0;
-		mWindow.clear();
+		mWindow.clear(sf::Color(255,0,255,255));
 
 		sf::Event event;
 

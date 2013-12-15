@@ -21,6 +21,8 @@ Game::Game(Textures *pTextureHolder,  sf::View * pView) :
 	*/
 
 	mView->reset(sf::FloatRect(0,0,WindowWidth,WindowHeight));
+	//mView->zoom(0.5f);
+	mView->setCenter(mPlayer.getPosition());
 }
 
 void Game::reset()
@@ -46,7 +48,8 @@ Game::~Game(void)
 //left in as example
 void Game::update()
 {
-	mView->setCenter(mPlayer.getPosition());
+	//mView->setCenter(static_cast<int>(mPlayer.getPosition().x),static_cast<int>(mPlayer.getPosition().y));
+	mView->move(mPlayer.getVelocity().x,mPlayer.getVelocity().y);
 
 	if(mView->getCenter().x < mView->getSize().x/2)
 	{
