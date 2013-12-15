@@ -28,13 +28,12 @@ Game::Game(Textures *pTextureHolder,  sf::View * pView) :
 void Game::reset()
 {
 	quit();
-	mPlayer.setPosition(WindowWidth/2,WindowHeight -40);
+	mPlayer.setPosition(50,50);
 	mPlayer.setIsLeft(false);
 	mPlayer.setIsRight(false);
 	mPlayer.setIsUp(false);
 	mPlayer.setIsDown(false);
 	mPlayer.setIsAttacking(false);
-
 }
 
 Game::~Game(void)
@@ -49,23 +48,25 @@ Game::~Game(void)
 void Game::update()
 {
 
+
+	//move view to follow player unless view would expose past the room, then stop moving to player
 	mView->setCenter(static_cast<int>(mPlayer.getOldPosition().x),static_cast<int>(mPlayer.getOldPosition().y));
 
 	if(mView->getCenter().x < mView->getSize().x/2)
 	{
 		mView->setCenter(static_cast<int>(mView->getSize().x/2), static_cast<int>(mView->getCenter().y));
 	}
-	else if(mView->getCenter().x > mMap.getCurrentRoom()->getRoomWidth() * 32 - mView->getSize().x/2)
+	else if(mView->getCenter().x > mMap.getCurrentRoom()->getRoomWidth() * mMap.getCurrentRoom()->getTileSize().x - mView->getSize().x/2)
 	{
-		mView->setCenter(static_cast<int>(mMap.getCurrentRoom()->getRoomWidth() * 32 - mView->getSize().x/2), static_cast<int>(mView->getCenter().y));
+		mView->setCenter(static_cast<int>(mMap.getCurrentRoom()->getRoomWidth() * mMap.getCurrentRoom()->getTileSize().x - mView->getSize().x/2), static_cast<int>(mView->getCenter().y));
 	}
 	if(mView->getCenter().y < mView->getSize().y/2)
 	{
 		mView->setCenter(static_cast<int>(mView->getCenter().x), static_cast<int>(mView->getSize().y/2));
 	}
-	else if(mView->getCenter().y > mMap.getCurrentRoom()->getRoomHeight() * 32 - mView->getSize().y/2)
+	else if(mView->getCenter().y > mMap.getCurrentRoom()->getRoomHeight() * mMap.getCurrentRoom()->getTileSize().y - mView->getSize().y/2)
 	{
-		mView->setCenter(static_cast<int>(mView->getCenter().x), static_cast<int>(mMap.getCurrentRoom()->getRoomHeight() * 32 - mView->getSize().y/2));
+		mView->setCenter(static_cast<int>(mView->getCenter().x), static_cast<int>(mMap.getCurrentRoom()->getRoomHeight() * mMap.getCurrentRoom()->getTileSize().y - mView->getSize().y/2));
 	}
 	
 

@@ -43,5 +43,6 @@ public:
 	void removeWall(int pIndex);
 	int getRoomWidth() { return mRoomWidth; }
 	int getRoomHeight() { return mRoomHeight; }
+	sf::Vector2u getTileSize() { return mTileSize;}
 };
 

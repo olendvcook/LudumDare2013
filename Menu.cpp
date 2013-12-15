@@ -27,7 +27,7 @@ Menu::~Menu(void)
 
 void Menu::update()
 {
-	mBackground.rotate(0.1);
+	//mBackground.rotate(0.1);
 }
 //TODO: REWORK THIS METHOD ALSO, ITS KINDA BAD TOO
 //draw all the members of the menu

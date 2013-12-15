@@ -17,8 +17,6 @@ GameLoop::~GameLoop(void)
 void GameLoop::loop()
 {
 
-
-
 	mGameState = gMENU;
 	//Initialize variables to regulate update speed
 	sf::Clock clock;
@@ -34,6 +32,8 @@ void GameLoop::loop()
 	//create container classes
 	Menu mMenu(&mTextureHolder);
 	Game mGame(&mTextureHolder, &mView);
+
+	gameOver.setScale(0.5,0.5);
 
 	//game loop
 	while (mWindow.isOpen())
@@ -108,9 +108,9 @@ void GameLoop::loop()
 		interpolation = float(clock.getElapsedTime().asMilliseconds() + SKIP_TICKS - nextGameTick)
 			/ float(SKIP_TICKS);
 
-		gameOver.setPosition(mView.getCenter().x - WindowWidth/2, mView.getCenter().y - WindowHeight/2);
+		//mWindow.setView(mView);
+		gameOver.setPosition(mView.getCenter().x - mView.getSize().x/2, mView.getCenter().y - mView.getSize().y/2);
 
-		//draw methods here
 		switch(mGameState)
 		{
 		case(gMENU):
