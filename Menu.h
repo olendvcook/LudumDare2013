@@ -15,7 +15,7 @@ private:
 	sf::Sprite mBackground;
 	std::vector<Button> mButtons;
 public:
-	Menu(Textures *pSpriteSheet);
+	Menu(Textures *pTextureHolder);
 	virtual ~Menu(void);
 	void update();
 	void draw(sf::RenderWindow *window);

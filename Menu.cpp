@@ -3,17 +3,17 @@
 //the Class whose implimentation is most scetchy
 
 //pass in pointer to object that contains all the textures
-Menu::Menu(Textures *pSpriteSheet)
+Menu::Menu(Textures *pTextureHolder)
 {
 	//add the buttons/background
 	//example:
 	//TODO: Make Button Insertion Less Hardcoded
 	
-	mButtons.insert(mButtons.begin(), Button(sf::Vector2i(WindowWidth/2 - 100,200), sf::Vector2i(400, 182), pSpriteSheet->getTexture(sBUTTONS), bSTART));
-	mButtons.insert(mButtons.begin(), Button(sf::Vector2i(WindowWidth/2 - 100,300), sf::Vector2i(400, 182), pSpriteSheet->getTexture(sBUTTONS), bCREDITS));
-	mButtons.insert(mButtons.begin(), Button(sf::Vector2i(WindowWidth/2 - 100,300), sf::Vector2i(400, 182), pSpriteSheet->getTexture(sBUTTONS), bBACK));
+	mButtons.insert(mButtons.begin(), Button(sf::Vector2i(WindowWidth/2 - 100,200), sf::Vector2i(400, 182), pTextureHolder->getTexture(sBUTTONS), bSTART));
+	mButtons.insert(mButtons.begin(), Button(sf::Vector2i(WindowWidth/2 - 100,300), sf::Vector2i(400, 182), pTextureHolder->getTexture(sBUTTONS), bCREDITS));
+	mButtons.insert(mButtons.begin(), Button(sf::Vector2i(WindowWidth/2 - 100,300), sf::Vector2i(400, 182), pTextureHolder->getTexture(sBUTTONS), bBACK));
 
-	mBackground.setTexture(*pSpriteSheet->getTexture(sBACKGROUND));
+	mBackground.setTexture(*pTextureHolder->getTexture(sBACKGROUND));
 	mBackground.setPosition(0,0);
 	//set origin to middle of sprite to rotate around middle
 	mBackground.setOrigin(400, 400);

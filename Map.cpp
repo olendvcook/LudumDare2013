@@ -6,9 +6,8 @@ Map::Map(Textures *pTextureHolder):
 	mMapHeight(20),
 	mTextureHolder(pTextureHolder)
 {
-	Room* tmpRoomHolder[20*20];
-	mRoomHolder = *tmpRoomHolder;
-	setCurrentRoom(0,5);
+	generateMap();
+	setCurrentRoom(0,0);
 
 }
 
@@ -22,23 +21,23 @@ void Map::setCurrentRoom (eExitDirection pDirection)
 	switch(pDirection)
 	{
 	case(UP):
-		mCurrentRoom = &mRoomHolder[mMapWidth * --mCurrentRoomYpos + mCurrentRoomXpos ];
+		mCurrentRoom = mRoomHolder[mMapWidth * --mCurrentRoomYpos + mCurrentRoomXpos ];
 		break;
 	case(DOWN):
-		mCurrentRoom = &mRoomHolder[mMapWidth * ++mCurrentRoomYpos + mCurrentRoomXpos];
+		mCurrentRoom = mRoomHolder[mMapWidth * ++mCurrentRoomYpos + mCurrentRoomXpos];
 		break;
 	case(LEFT):
-		mCurrentRoom = &mRoomHolder[mMapWidth * mCurrentRoomYpos + --mCurrentRoomXpos];
+		mCurrentRoom = mRoomHolder[mMapWidth * mCurrentRoomYpos + --mCurrentRoomXpos];
 		break;
 	case(RIGHT):
-		mCurrentRoom = &mRoomHolder[mMapWidth * mCurrentRoomYpos + ++mCurrentRoomXpos];
+		mCurrentRoom = mRoomHolder[mMapWidth * mCurrentRoomYpos + ++mCurrentRoomXpos];
 		break;
 	}
 }
 
 void Map::setCurrentRoom (int pXIndex, int pYIndex)
 {
-	mCurrentRoom = &mRoomHolder[mMapWidth * pYIndex + pXIndex];
+	mCurrentRoom = mRoomHolder[mMapWidth * pYIndex + pXIndex];
 }
 
 void Map::generateMap(void)
@@ -72,6 +71,6 @@ int objects[100]=
 		1,0,0,0,0,0,0,0,0,1,
 		1,1,1,1,1,1,1,1,1,1
 	};
-	mRoomHolder[mMapWidth * 5 + 0] = *new Room(mTextureHolder, "Assets/tileset.png", sf::Vector2u(32,32), map, objects, 32, 32);
+	mRoomHolder[mMapWidth * 0 + 0] = new Room(mTextureHolder, "Assets/tileset.png", sf::Vector2u(32,32), map, objects, 10, 10);
 }
 

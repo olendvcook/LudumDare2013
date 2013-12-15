@@ -28,7 +28,7 @@ void Room::generateObjects(int pObjectLayer[])
 	{
 		for(int j = 0; j < mRoomHeight; j++)
 		{
-			switch(pObjectLayer[i])
+			switch(pObjectLayer[mRoomWidth * j + i])
 			{
 			case(WALLS):
 				//add da walls

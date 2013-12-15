@@ -17,14 +17,11 @@ Player::Player(
 	
 	//add animations idle/walk/jump
 	//animation takes in Number of frames / animation speed / escalator or not
-	mAnimations.insert(mAnimations.begin(), Animation(2, 0.2, false));
-	mAnimations.insert(mAnimations.begin(), Animation(2, 0.2, false));
-	mAnimations.insert(mAnimations.begin(), Animation(2, 0.2, false));
-	mAnimations.insert(mAnimations.begin(), Animation(2, 0.2, false));
+	mAnimations.insert(mAnimations.begin(), Animation(8, 0.2, false));
+	mAnimations.insert(mAnimations.begin(), Animation(8, 0.2, false));
+	mAnimations.insert(mAnimations.begin(), Animation(8, 0.2, false));
+	mAnimations.insert(mAnimations.begin(), Animation(8, 0.2, false));
 
-	mSprite.setScale(3,3);
-	mSize.x *=3;
-	mSize.y *=3;
 	//start playing idle animation
 	AnimatedSprite::startAnimation();
 
@@ -43,15 +40,13 @@ void Player::update()
 	if(isRight && !isLeft)
 	{
 		mVelocity.x = mSpeed;
-		mCurrentAnimation = 2;
-		mSprite.setScale(3,3);
+		mCurrentAnimation = 1;
 	}
 	//move left
 	else if(isLeft && !isRight)
 	{
 		mVelocity.x = -mSpeed;
-		mCurrentAnimation = 2;
-		mSprite.setScale(-3,3);
+		mCurrentAnimation = 3;
 	}
 	//come to a stop
 	else
@@ -64,7 +59,7 @@ void Player::update()
 	if(isUp && !isDown)
 	{
 		mVelocity.y = -mSpeed;
-		mCurrentAnimation = 2;
+		mCurrentAnimation = 0;
 	}
 	//move down
 	else if(isDown && !isUp)
@@ -76,16 +71,15 @@ void Player::update()
 	else
 	{
 		mVelocity.y = 0;
-		mSprite.scale(1,1);
 	}
 
 	if(isAttacking)
 	{
 		mVelocity.x = 0;
 		mVelocity.y = 0;
-		mCurrentAnimation = 3;
 	}
 	
+	/*
 	//check bounds with right and left side of screen
 	if(mPosition.x <= 32 + mSize.x/2)
 	{
@@ -113,6 +107,7 @@ void Player::update()
 		if(mVelocity.y > 0)
 			mVelocity.y = 0;
 	}
+	*/
 	
 
 	//call superclass update

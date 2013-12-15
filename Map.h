@@ -9,7 +9,7 @@ class Map
 private:
 	Textures *mTextureHolder;
 	//array of rooms
-	Room* mRoomHolder;
+	Room* mRoomHolder[20*20];
 	//pointer to current room
 	Room* mCurrentRoom;
 	int mCurrentRoomXpos;

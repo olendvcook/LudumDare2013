@@ -37,7 +37,8 @@ Textures::Textures(void)
 	texture1.loadFromFile("Assets/complete.png");
 	mSheets.insert(mSheets.end(), texture1);
 
-
+	texture1.loadFromFile("Assets/wall.png");
+	mSheets.insert(mSheets.end(), texture1);
 	
 }
 

@@ -11,7 +11,7 @@
 //spritesheet type
 //Add types of spritesheets to easily retrieve them by name
 //example:
-enum SPRITESHEETS { sBUTTONS, sPLAYER, sBACKGROUND, sGAMEOVER, sGHOST, sGAMETILE, sPAUSED, sCOMPLETE};
+enum SPRITESHEETS { sBUTTONS, sPLAYER, sBACKGROUND, sGAMEOVER, sGHOST, sGAMETILE, sPAUSED, sCOMPLETE, sWALL};
 class Textures
 {
 private:

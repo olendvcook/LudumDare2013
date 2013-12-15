@@ -3,7 +3,7 @@
 
 //just call gameloop
 GameLoop::GameLoop(void) :
-	mSpriteSheet()
+	mTextureHolder()
 {
 	loop();
 }
@@ -31,8 +31,8 @@ void GameLoop::loop()
 	mView.reset(sf::FloatRect(0,0,WindowWidth,WindowHeight));
 
 	//create container classes
-	Menu mMenu(&mSpriteSheet);
-	Game mGame(&mSpriteSheet, &mView);
+	Menu mMenu(&mTextureHolder);
+	Game mGame(&mTextureHolder, &mView);
 
 	//game loop
 	while (mWindow.isOpen())
@@ -119,16 +119,16 @@ void GameLoop::loop()
 			mGame.draw(&mWindow, interpolation);
 			break;
 		case(gGAMEOVER):
-			gameOver.setTexture(*mSpriteSheet.getTexture(sGAMEOVER));
+			gameOver.setTexture(*mTextureHolder.getTexture(sGAMEOVER));
 			mWindow.draw(gameOver);
 			break;
 		case(gPAUSED):
 			mGame.draw(&mWindow, 0);
-			gameOver.setTexture(*mSpriteSheet.getTexture(sPAUSED));
+			gameOver.setTexture(*mTextureHolder.getTexture(sPAUSED));
 			mWindow.draw(gameOver);
 			break;
 		case(gCOMPLETE):
-			gameOver.setTexture(*mSpriteSheet.getTexture(sCOMPLETE));
+			gameOver.setTexture(*mTextureHolder.getTexture(sCOMPLETE));
 			mWindow.draw(gameOver);
 			break;
 		default:

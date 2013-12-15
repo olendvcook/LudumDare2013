@@ -19,7 +19,7 @@ class GameLoop
 {
 private:
 	sf::RenderWindow mWindow;
-	Textures mSpriteSheet;
+	Textures mTextureHolder;
 	sf::Sprite gameOver;
 
 	sf::View mView;

@@ -7,6 +7,7 @@
 #include "Textures.h"
 #include "Enemy.h"
 #include "Tilemap.h"
+#include "Map.h"
 
 //Handles the gameplay state, holds its entities like enemies and player would hold score etc...
 //Handles interaction between entities
@@ -18,22 +19,13 @@ class Game
 private:
 	//store entities
 	Player mPlayer;
-	std::vector<Enemy*> mEnemies;
+	Map mMap;
 
 	//drawing stuff
 	Textures *mTextures;
 	sf::Sprite mBackground;
 	sf::Font mFont;
-	sf::Text mTextLives;
-	sf::Text mTextTown;
 
-	//game specific stuff
-	int mNumofLives;
-	int mTownHealth;
-	int mCurrentLevel;
-	int mMaxLevel;
-
-	TileMap tilemap;
 
 	sf::View* mView;
 
@@ -42,7 +34,7 @@ private:
 
 public:
 
-	Game(Textures *pSpriteSheet, sf::View * pView);
+	Game(Textures *pTextureHolder, sf::View * pView);
 	virtual ~Game(void);
 
 	void update();

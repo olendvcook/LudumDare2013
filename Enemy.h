@@ -31,7 +31,8 @@ public:
 	//override animated sprite update method
 	virtual void update();
 
-	virtual bool isActive() {return mIsActive;}
+	virtual bool getIsActive() {return mIsActive;}
+	virtual void setIsActive(bool pBool) { mIsActive = pBool; }
 
 	virtual void setEnemyState(ENEMYSTATE pEnemyState) { mEnemyState = pEnemyState; }
 };
