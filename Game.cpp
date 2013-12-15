@@ -3,7 +3,7 @@
 //takes in pointer to class that hold spritesheets so entities can be created with certain spritesheet
 Game::Game(Textures *pTextureHolder,  sf::View * pView) :
 	mTextures(pTextureHolder),
-	mPlayer(sf::Vector2f(WindowWidth/2,WindowHeight/2), sf::Vector2f(0,0), sf::Vector2i(32,32), (pTextureHolder->getTexture(sPLAYER))),
+	mPlayer(sf::Vector2f(50,50), sf::Vector2f(0,0), sf::Vector2i(32,32), (pTextureHolder->getTexture(sPLAYER))),
 	mView(pView),
 	mMap(pTextureHolder)
 {
@@ -48,8 +48,6 @@ Game::~Game(void)
 void Game::update()
 {
 
-	mPlayer.update();
-
 	mView->setCenter(mPlayer.getPosition());
 
 	if(mView->getCenter().x < mView->getSize().x/2)
@@ -93,15 +91,11 @@ void Game::update()
 
 		if(tmpWallPtr->getGlobalBounds().intersects(mPlayer.getBounds()))
 		{
-			mPlayer.setVelocity(0,0);
-			mPlayer.setIsLeft(false);
-			mPlayer.setIsRight(false);
-			mPlayer.setIsUp(false);
-			mPlayer.setIsDown(false);
-			
+			mPlayer.revertPosition();
 		}
 	}
-	
+
+	mPlayer.update();
 }
 
 //just call draw of all entities

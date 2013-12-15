@@ -11,6 +11,7 @@ class AnimatedSprite
 {
 protected:
 	sf::Vector2f mPosition;
+	sf::Vector2f mOldPosition;
 	sf::Vector2f mVelocity;
 	//for rotation
 	float mAngle;
@@ -61,4 +62,5 @@ public:
 	virtual void setVelocity(sf::Vector2f pVelocity) { mVelocity = pVelocity; };
 	virtual void setPosition(float pX, float pY) { mPosition = sf::Vector2f(pX,pY); };
 	virtual void setPosition(sf::Vector2f pPosition) { mPosition = pPosition; };
+	virtual void revertPosition() { mPosition = mOldPosition; }
 };

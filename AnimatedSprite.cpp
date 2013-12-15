@@ -43,6 +43,8 @@ void AnimatedSprite::update()
 		mAnimations.at(mCurrentAnimation).resetAnimation();
 	}
 
+	mOldPosition = mPosition;
+
 	//move sprite by velocity
 	mPosition += mVelocity;
 	

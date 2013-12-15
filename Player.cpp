@@ -17,10 +17,10 @@ Player::Player(
 	
 	//add animations idle/walk/jump
 	//animation takes in Number of frames / animation speed / escalator or not
-	mAnimations.insert(mAnimations.begin(), Animation(8, 0.2, false));
-	mAnimations.insert(mAnimations.begin(), Animation(8, 0.2, false));
-	mAnimations.insert(mAnimations.begin(), Animation(8, 0.2, false));
-	mAnimations.insert(mAnimations.begin(), Animation(8, 0.2, false));
+	mAnimations.insert(mAnimations.begin(), Animation(8, 0.1, false));
+	mAnimations.insert(mAnimations.begin(), Animation(8, 0.1, false));
+	mAnimations.insert(mAnimations.begin(), Animation(8, 0.1, false));
+	mAnimations.insert(mAnimations.begin(), Animation(8, 0.1, false));
 
 	//start playing idle animation
 	AnimatedSprite::startAnimation();
@@ -52,7 +52,6 @@ void Player::update()
 	else
 	{
 		mVelocity.x = 0;
-		mCurrentAnimation = 0;
 	}
 
 	//move up
@@ -71,6 +70,15 @@ void Player::update()
 	else
 	{
 		mVelocity.y = 0;
+	}
+
+	if(mVelocity.x == 0 && mVelocity.y == 0)
+	{
+		endAnimation();
+	}
+	else if (!mIsAnimating)
+	{
+		startAnimation();
 	}
 
 	if(isAttacking)
