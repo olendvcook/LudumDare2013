@@ -16,17 +16,22 @@ class Enemy :
 {
 protected:
 	ENEMYSTATE mEnemyState;
+
+	bool mIsActive;
 public:
 	Enemy(sf::Vector2f pPosition,  
 		sf::Vector2i pSize, 
 		sf::Texture *pTexture, 
 		sf::Vector2f pVelocity = sf::Vector2f(0,0),
+		bool pIsActive = true,
 		float pAngle = 0, 
 		float pAngularVelocity = 0);
 	virtual ~Enemy(void);
 
 	//override animated sprite update method
 	virtual void update();
+
+	virtual bool isActive() {return mIsActive;}
 
 	virtual void setEnemyState(ENEMYSTATE pEnemyState) { mEnemyState = pEnemyState; }
 };

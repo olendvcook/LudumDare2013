@@ -5,10 +5,12 @@ Enemy::Enemy(sf::Vector2f pPosition,
 		sf::Vector2i pSize, 
 		sf::Texture *pTexture,
 		sf::Vector2f pVelocity,
+		bool pIsActive,
 		float pAngle, 
 		float pAngularVelocity) :
 	//call superclass constructor
-	AnimatedSprite(pPosition, pVelocity, pSize, pTexture, pAngle, pAngularVelocity)
+	AnimatedSprite(pPosition, pVelocity, pSize, pTexture, pAngle, pAngularVelocity),
+	mIsActive(pIsActive)
 {
 	//insert animations based on Enemy spriteSheet
 	mAnimations.insert(mAnimations.begin(), Animation(4, 0.2, false));
