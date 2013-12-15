@@ -1,10 +1,10 @@
 #include "Enemy.h"
 
 
-Enemy::Enemy(sf::Vector2f pPosition, 
-		sf::Vector2f pVelocity, 
+Enemy::Enemy(sf::Vector2f pPosition,  
 		sf::Vector2i pSize, 
-		sf::Texture *pTexture,  
+		sf::Texture *pTexture,
+		sf::Vector2f pVelocity,
 		float pAngle, 
 		float pAngularVelocity) :
 	//call superclass constructor

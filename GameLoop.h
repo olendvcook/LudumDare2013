@@ -22,7 +22,6 @@ private:
 	Textures mSpriteSheet;
 	sf::Sprite gameOver;
 
-	
 	sf::View mView;
 
 public:

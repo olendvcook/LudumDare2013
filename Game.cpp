@@ -24,7 +24,6 @@ Game::Game(Textures *pSpriteSheet,  sf::View * pView) :
 
 	mView->reset(sf::FloatRect(0,0,WindowWidth,WindowHeight));
 
-
 	int level[] =
     {
         2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,

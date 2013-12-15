@@ -17,10 +17,10 @@ class Enemy :
 protected:
 	ENEMYSTATE mEnemyState;
 public:
-	Enemy(sf::Vector2f pPosition, 
-		sf::Vector2f pVelocity, 
+	Enemy(sf::Vector2f pPosition,  
 		sf::Vector2i pSize, 
 		sf::Texture *pTexture, 
+		sf::Vector2f pVelocity = sf::Vector2f(0,0),
 		float pAngle = 0, 
 		float pAngularVelocity = 0);
 	virtual ~Enemy(void);
