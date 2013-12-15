@@ -21,7 +21,6 @@ Game::Game(Textures *pTextureHolder,  sf::View * pView) :
 	*/
 
 	mView->reset(sf::FloatRect(0,0,WindowWidth,WindowHeight));
-	
 }
 
 void Game::reset()
@@ -47,24 +46,23 @@ Game::~Game(void)
 //left in as example
 void Game::update()
 {
-
 	mView->setCenter(mPlayer.getPosition());
 
 	if(mView->getCenter().x < mView->getSize().x/2)
 	{
-		mView->setCenter(mView->getSize().x/2, mView->getCenter().y);
+		mView->setCenter(static_cast<int>(mView->getSize().x/2), static_cast<int>(mView->getCenter().y));
 	}
 	if(mView->getCenter().y < mView->getSize().y/2)
 	{
-		mView->setCenter(mView->getCenter().x, mView->getSize().y/2);
+		mView->setCenter(static_cast<int>(mView->getCenter().x), static_cast<int>(mView->getSize().y/2));
 	}
 	if(mView->getCenter().x > 32 * 32 - mView->getSize().x/2)
 	{
-		mView->setCenter(32 * 32 - mView->getSize().x/2, mView->getCenter().y);
+		mView->setCenter(static_cast<int>(32 * 32 - mView->getSize().x/2), static_cast<int>(mView->getCenter().y));
 	}
 	if(mView->getCenter().y > 32 * 32 - mView->getSize().y/2)
 	{
-		mView->setCenter(mView->getCenter().x, 32 * 32 - mView->getSize().y/2);
+		mView->setCenter(static_cast<int>(mView->getCenter().x), static_cast<int>(32 * 32 - mView->getSize().y/2));
 	}
 
 	for(int i = 0; i < mMap.getCurrentRoom()->getEnemyAmount(); i++)

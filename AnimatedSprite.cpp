@@ -56,7 +56,7 @@ void AnimatedSprite::draw(sf::RenderWindow *window, float pInterpolation)
 {
 	//set sprite position to position of the actual entity + interpolation
 	//mSprite.setPosition(mPosition.x + (mVelocity.x * pInterpolation), mPosition.y + (mVelocity.y * pInterpolation)); 
-	mSprite.setPosition(mPosition.x, mPosition.y);
+	mSprite.setPosition(static_cast<int>(mPosition.x), static_cast<int>(mPosition.y));
 
 	//only draw the certain sprite needed from the sprite sheet
 	mSprite.setTextureRect(sf::IntRect(mAnimations[mCurrentAnimation].getCurrentFrame() * mSpriteSize.x, 

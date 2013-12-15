@@ -6,6 +6,7 @@ GameLoop::GameLoop(void) :
 	mTextureHolder()
 {
 	loop();
+	mWindow.setVerticalSyncEnabled(true);
 }
 
 
