@@ -9,16 +9,11 @@ Menu::Menu(Textures *pTextureHolder)
 	//example:
 	//TODO: Make Button Insertion Less Hardcoded
 	
-	mButtons.insert(mButtons.begin(), Button(sf::Vector2i(WindowWidth/2 - 100,200), sf::Vector2i(400, 182), pTextureHolder->getTexture(sBUTTONS), bSTART));
-	mButtons.insert(mButtons.begin(), Button(sf::Vector2i(WindowWidth/2 - 100,300), sf::Vector2i(400, 182), pTextureHolder->getTexture(sBUTTONS), bCREDITS));
-	mButtons.insert(mButtons.begin(), Button(sf::Vector2i(WindowWidth/2 - 100,300), sf::Vector2i(400, 182), pTextureHolder->getTexture(sBUTTONS), bBACK));
+	mButtons.insert(mButtons.begin(), Button(sf::Vector2i(WindowWidth/2 - 96,300), sf::Vector2i(192, 64), pTextureHolder->getTexture(sBUTTONS), bSTART));
+	mButtons.insert(mButtons.begin(), Button(sf::Vector2i(WindowWidth/2 - 96,360), sf::Vector2i(192, 64), pTextureHolder->getTexture(sBUTTONS), bCREDITS));
+	mButtons.insert(mButtons.begin(), Button(sf::Vector2i(WindowWidth/2 - 96,360), sf::Vector2i(192, 64), pTextureHolder->getTexture(sBUTTONS), bBACK));
 
-	mBackground.setTexture(*pTextureHolder->getTexture(sBACKGROUND));
-	mBackground.setPosition(0,0);
-	//set origin to middle of sprite to rotate around middle
-	mBackground.setOrigin(400, 400);
-	mBackground.scale(2,2);
-
+	mBackground.setTexture(*pTextureHolder->getTexture(sTITLEBACKGROUND));
 }
 
 Menu::~Menu(void)
@@ -27,7 +22,7 @@ Menu::~Menu(void)
 
 void Menu::update()
 {
-	mBackground.rotate(0.1);
+	//mBackground.rotate(0.1);
 }
 //TODO: REWORK THIS METHOD ALSO, ITS KINDA BAD TOO
 //draw all the members of the menu
@@ -88,8 +83,8 @@ void Menu::draw(sf::RenderWindow *window)
 		case mMAIN:
 			texture.loadFromFile("Assets/title.png");
 			title.setTexture(texture);
-			title.setScale(0.7,0.7);
-			title.setPosition(WindowWidth/2 - title.getGlobalBounds().width/2, 50);
+			//title.setScale(0.7,0.7);
+			//title.setPosition(WindowWidth/2 - title.getGlobalBounds().width/2, 50);
 			window->draw(title);
 			break;
 		case mOPTIONS:
@@ -99,8 +94,8 @@ void Menu::draw(sf::RenderWindow *window)
 		case mCREDITS:
 			texture.loadFromFile("Assets/credits.png");
 			title.setTexture(texture);
-			title.setScale(0.7,0.7);
-			title.setPosition(WindowWidth/2 - title.getGlobalBounds().width/2, 50);
+			//title.setScale(0.7,0.7);
+			//title.setPosition(WindowWidth/2 - title.getGlobalBounds().width/2, 50);
 			window->draw(title);
 			break;
 		default:

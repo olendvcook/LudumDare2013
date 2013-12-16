@@ -1,0 +1,93 @@
+playersheet.png
+	4 more rows with idle animation for each direction
+
+spacezombie.png
+	same size as player, a space zombie in space clothes that is chases the player
+
+battery.png
+	battery pickup item
+	can animate to glow  or flash if you want
+
+engine.png
+	engine part trying to find to fix escape pod
+
+laser.png
+	animated laser we can shoot
+
+batterymeter.png
+	displays how much battery is left
+	32x32 (size up for debate)
+	first column is empty battery
+	others adds one more bar
+	5 bars is full
+
+healthmeter.png
+	displays health state
+	32x32 (size up for debate)
+	first column is red health, then middle health (yellow prolly), and full health (green prolly)
+
+hologramborder.png
+	(size up for debate)
+	ok our idea was to have it so when you press a button he would project a hologram displaying either his battery meter or health so the batterymeter health meter and hologram should work together to look like maybe a light blue hologram thingy maybe animate border so it looks flickery (could even have healthmeter and batterymeter have animation for each and animated for flickery)
+
+objecttileset.png
+	(32x32 each tile)
+	using this to help build objects for rooms would have:
+	X for wall
+	picture of zombie 
+	battery
+	engine
+	Left arrow
+	Right arrow
+	Up arrow
+	Down arrow
+
+tileset.png
+	32x32 for each tile
+	a tileset for a space ship environment
+
+	environment ideas:
+	(1) Airlock
+	(2) Natural Botanical Gardens and Aquarium
+	(3) Engine Room
+	(4) Science Laboratories
+	(5) Living Quarters
+	(6) Cafeteria
+	(7) Central Command and Bridge
+	(8) Cloning Facility
+	(9) Enrichment Facility
+	(10) Casino
+
+	Can all be one spritesheet
+
+	for this weekend: get atleast a generic spaceship environment done
+
+
+complete.png
+
+	no clue what to do here
+
+gameover.png
+
+	dan was thinking of having an animation of cs-499 dying or something under a spotlight
+
+titlebackground.png
+	
+	space background
+
+titlerobot.png (size idk)
+	have CS-499 mining spacerock (would be cool if animated)
+
+titlespaceship.png (size idk)
+	SK-27 floating in the background (maybe animated flashing lights)
+
+	titlecs-499.png and titlesk-27.png are going to be placed on titlebackground and moved around a bit to produce a floating effect
+	Size is appropriate to however small they need to be to have title.png and the buttons still on title screen
+
+paused.png
+
+	paused seems fine to me unless you want to do a new font
+
+title.png
+
+	just title of game

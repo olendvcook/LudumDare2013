@@ -11,7 +11,7 @@ Button::Button(sf::Vector2i pPosition, sf::Vector2i pSize, sf::Texture *pTexture
 {
 	//set sprite position now instead of in draw because buttons dont move
 	mSprite.setPosition(pPosition.x, pPosition.y);
-	mSprite.scale(0.5, 0.5);
+	//mSprite.scale(0.5, 0.5);
 }
 
 

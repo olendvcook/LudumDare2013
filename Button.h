@@ -4,7 +4,7 @@
 #include "Includes.h"
 #include <iostream>
 
-enum BUTTONTYPE { bSTART, bCREDITS, bBACK, bOPTIONS, bTUTORIAL, bGAMEOVER };
+enum BUTTONTYPE { bSTART, bBACK, bCREDITS, bOPTIONS, bTUTORIAL, bGAMEOVER };
 //TODO: BUTTON HOLDs WHAT MENU STATE IT WORKS WITH
 class Button
 {

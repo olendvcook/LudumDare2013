@@ -9,6 +9,7 @@
 #include "Tilemap.h"
 #include "Map.h"
 #include "LightSystem.h"
+#include "Laser.h"
 
 //Handles the gameplay state, holds its entities like enemies and player would hold score etc...
 //Handles interaction between entities
@@ -18,12 +19,13 @@
 class Game
 {
 private:
+	std::vector<Laser*> mLasers;
 	//store entities
 	Player mPlayer;
 	Map mMap;
 
 	//drawing stuff
-	Textures *mTextures;
+	Textures *mTextureHolder;
 	sf::Sprite mBackground;
 	sf::Font mFont;
 
@@ -43,10 +45,8 @@ public:
 	void input(sf::Event *pEvent);
 
 	//add and delete for each vector
-	void addEnemy(float pX, float pY, float xVel, float yVel);
-	void removeEnemy(int pIndex);
-	void addGrave(float pX, float pY, float pReleaseTimeMin, float pReleaseTimeMax);
-	void removeGrave(int pIndex);
+	void addLaser(float pX, float pY, float xVel, float yVel);
+	void removeLaser(int pIndex);
 
 	void nextlevel();
 	void reset();

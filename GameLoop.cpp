@@ -5,8 +5,8 @@
 GameLoop::GameLoop(void) :
 	mTextureHolder()
 {
-	loop();
 	mWindow.setVerticalSyncEnabled(true);
+	loop();
 }
 
 
@@ -74,6 +74,8 @@ void GameLoop::loop()
 	Menu mMenu(&mTextureHolder);
 	Game mGame(&mTextureHolder, &mView);
 
+	gameOver.setScale(0.5,0.5);
+
 	//game loop
 	while (mWindow.isOpen())
 	{
@@ -113,6 +115,7 @@ void GameLoop::loop()
 			nextGameTick += SKIP_TICKS;
 			loops++;
 		}
+		
 
 		//Input Here
 		while (mWindow.pollEvent(event))
@@ -155,16 +158,18 @@ void GameLoop::loop()
 		interpolation = float(clock.getElapsedTime().asMilliseconds() + SKIP_TICKS - nextGameTick)
 			/ float(SKIP_TICKS);
 
-		gameOver.setPosition(mView.getCenter().x - WindowWidth/2, mView.getCenter().y - WindowHeight/2);
+		//mWindow.setView(mView);
+		gameOver.setPosition(mView.getCenter().x - mView.getSize().x/2, mView.getCenter().y - mView.getSize().y/2);
 
-		//draw methods here
 		switch(mGameState)
 		{
 		case(gMENU):
+			mWindow.setView(mWindow.getDefaultView());
 			mMenu.draw(&mWindow);
 			break;
 		case(gGAME):
-			mGame.draw(&mWindow, interpolation, &ls);
+			mWindow.setView(mView);
+			mGame.draw(&mWindow, interpolation);
 			break;
 		case(gGAMEOVER):
 			gameOver.setTexture(*mTextureHolder.getTexture(sGAMEOVER));
@@ -185,5 +190,6 @@ void GameLoop::loop()
 		}
 
 		mWindow.display();
+		
 	}
 }

@@ -2,7 +2,7 @@
 
 //takes in pointer to class that hold spritesheets so entities can be created with certain spritesheet
 Game::Game(Textures *pTextureHolder,  sf::View * pView) :
-	mTextures(pTextureHolder),
+	mTextureHolder(pTextureHolder),
 	mPlayer(sf::Vector2f(50,50), sf::Vector2f(0,0), sf::Vector2i(32,32), (pTextureHolder->getTexture(sPLAYER))),
 	mView(pView),
 	mMap(pTextureHolder)
@@ -22,18 +22,19 @@ Game::Game(Textures *pTextureHolder,  sf::View * pView) :
 
 	mView->reset(sf::FloatRect(0,0,WindowWidth,WindowHeight));
 	mView->zoom(0.5f);
+
+	mView->setCenter(mPlayer.getPosition());
 }
 
 void Game::reset()
 {
 	quit();
-	mPlayer.setPosition(WindowWidth/2,WindowHeight -40);
+	mPlayer.setPosition(50,50);
 	mPlayer.setIsLeft(false);
 	mPlayer.setIsRight(false);
 	mPlayer.setIsUp(false);
 	mPlayer.setIsDown(false);
 	mPlayer.setIsAttacking(false);
-
 }
 
 Game::~Game(void)
@@ -47,31 +48,82 @@ Game::~Game(void)
 //left in as example
 void Game::update(ltbl::LightSystem * lightSystem, ltbl::Light_Point * light)
 {
-	mView->setCenter(mPlayer.getPosition());
+	//move view to follow player unless view would expose past the room, then stop moving to player
+	mView->setCenter(static_cast<int>(mPlayer.getOldPosition().x),static_cast<int>(mPlayer.getOldPosition().y));
 
 	if(mView->getCenter().x < mView->getSize().x/2)
 	{
 		mView->setCenter(static_cast<int>(mView->getSize().x/2), static_cast<int>(mView->getCenter().y));
 	}
+	else if(mView->getCenter().x > mMap.getCurrentRoom()->getRoomWidth() * mMap.getCurrentRoom()->getTileSize().x - mView->getSize().x/2)
+	{
+		mView->setCenter(static_cast<int>(mMap.getCurrentRoom()->getRoomWidth() * mMap.getCurrentRoom()->getTileSize().x - mView->getSize().x/2), static_cast<int>(mView->getCenter().y));
+	}
 	if(mView->getCenter().y < mView->getSize().y/2)
 	{
 		mView->setCenter(static_cast<int>(mView->getCenter().x), static_cast<int>(mView->getSize().y/2));
 	}
-	if(mView->getCenter().x > 32 * 32 - mView->getSize().x/2)
+	else if(mView->getCenter().y > mMap.getCurrentRoom()->getRoomHeight() * mMap.getCurrentRoom()->getTileSize().y - mView->getSize().y/2)
 	{
-		mView->setCenter(static_cast<int>(32 * 32 - mView->getSize().x/2), static_cast<int>(mView->getCenter().y));
+		mView->setCenter(static_cast<int>(mView->getCenter().x), static_cast<int>(mMap.getCurrentRoom()->getRoomHeight() * mMap.getCurrentRoom()->getTileSize().y - mView->getSize().y/2));
 	}
-	if(mView->getCenter().y > 32 * 32 - mView->getSize().y/2)
+	
+
+	for(int i = 0; i < mLasers.size(); i++)
 	{
-		mView->setCenter(static_cast<int>(mView->getCenter().x), static_cast<int>(32 * 32 - mView->getSize().y/2));
+		mLasers.at(i)->update();
+
+		if(mLasers.at(i)->getPosition().x < 0)
+		{
+			removeLaser(i);
+			continue;
+		}
+		else if(mLasers.at(i)->getPosition().y < 0)
+		{
+			removeLaser(i);
+			continue;
+		}
+		else if(mLasers.at(i)->getPosition().y > mMap.getCurrentRoom()->getRoomHeight() * mMap.getCurrentRoom()->getTileSize().y)
+		{
+			removeLaser(i);
+			continue;
+		}
+		else if(mLasers.at(i)->getPosition().y > mMap.getCurrentRoom()->getRoomWidth() * mMap.getCurrentRoom()->getTileSize().x)
+		{
+			removeLaser(i);
+			continue;
+		}
+
+		for(int j = 0; j < mMap.getCurrentRoom()->getWallAmount(); j++)
+		{
+			if(mLasers.at(i)->getBounds().intersects(mMap.getCurrentRoom()->getWall(j)->getGlobalBounds()))
+			{
+				//TODO: particles
+				removeLaser(i);
+				break;
+			}
+		}
+
+		for(int j = 0; j < mMap.getCurrentRoom()->getEnemyAmount(); j++)
+		{
+			if(mLasers.at(i)->getBounds().intersects(mMap.getCurrentRoom()->getEnemy(j)->getBounds()))
+			{
+				mMap.getCurrentRoom()->getEnemy(j)->setIsActive(false);
+				//TODO: particles
+				removeLaser(i);
+				break;
+			}
+		}
+
 	}
+
+
 
 	for(int i = 0; i < mMap.getCurrentRoom()->getEnemyAmount(); i++)
 	{	
 
 		//update enemy
 		Enemy* tmpEnemyPtr = mMap.getCurrentRoom()->getEnemy(i);
-		tmpEnemyPtr->update();
 
 		//collision detection with player
 		if(tmpEnemyPtr->getBounds().intersects(mPlayer.getBounds()))
@@ -82,6 +134,33 @@ void Game::update(ltbl::LightSystem * lightSystem, ltbl::Light_Point * light)
 				continue;
 			}
 		}
+		//TODO ENEMIES COLLIDING
+		
+		for(int j = 0; j < mMap.getCurrentRoom()->getEnemyAmount(); j++)
+		{
+			if(j==i) continue;
+			if(tmpEnemyPtr->getBounds().intersects(mMap.getCurrentRoom()->getEnemy(j)->getBounds()))
+			{
+				tmpEnemyPtr->revertPosition();
+				tmpEnemyPtr->setVelocity(-tmpEnemyPtr->getVelocity().x,-tmpEnemyPtr->getVelocity().y);
+				mMap.getCurrentRoom()->getEnemy(j)->revertPosition();
+				//mMap.getCurrentRoom()->getEnemy(j)->setVelocity(0,0);
+				mMap.getCurrentRoom()->getEnemy(j)->setVelocity(-mMap.getCurrentRoom()->getEnemy(j)->getVelocity().x,-mMap.getCurrentRoom()->getEnemy(j)->getVelocity().y);
+			}
+		}
+		
+
+		for(int i = 0; i < mMap.getCurrentRoom()->getWallAmount(); i++)
+		{
+			sf::Sprite* tmpWallPtr = mMap.getCurrentRoom()->getWall(i);
+
+			if(tmpWallPtr->getGlobalBounds().intersects(tmpEnemyPtr->getBounds()))
+			{
+				tmpEnemyPtr->revertPosition();
+			}
+		}
+
+		tmpEnemyPtr->update(mPlayer.getPosition());
 	}
 
 	for(int i = 0; i < mMap.getCurrentRoom()->getWallAmount(); i++)
@@ -95,6 +174,28 @@ void Game::update(ltbl::LightSystem * lightSystem, ltbl::Light_Point * light)
 	}
 
 	mPlayer.update();
+
+	//check for room switch
+	if(mPlayer.getPosition().x < 0)
+	{
+		mMap.setCurrentRoom(LEFT);
+		mPlayer.setPosition((mMap.getCurrentRoom()->getRoomWidth() * mMap.getCurrentRoom()->getTileSize().x) - mPlayer.getSize().x/2, mPlayer.getPosition().y);
+	}
+	else if (mPlayer.getPosition().y < 0)
+	{
+		mMap.setCurrentRoom(UP);
+		mPlayer.setPosition(mPlayer.getPosition().x, (mMap.getCurrentRoom()->getRoomHeight() * mMap.getCurrentRoom()->getTileSize().y) - mPlayer.getSize().y/2);
+	}
+	else if (mPlayer.getPosition().x > (mMap.getCurrentRoom()->getRoomWidth() * mMap.getCurrentRoom()->getTileSize().x))
+	{
+		mMap.setCurrentRoom(RIGHT);
+		mPlayer.setPosition(mPlayer.getSize().x/2, mPlayer.getPosition().y);
+	}
+	else if (mPlayer.getPosition().y > (mMap.getCurrentRoom()->getRoomHeight() * mMap.getCurrentRoom()->getTileSize().y))
+	{
+		mMap.setCurrentRoom(DOWN);
+		mPlayer.setPosition(mPlayer.getPosition().x, mPlayer.getSize().y/2);
+	}
 
 	light->SetCenter(Vec2f(mPlayer.getPosition().x, WindowHeight - mPlayer.getPosition().y)); 
 
@@ -111,11 +212,16 @@ void Game::draw(sf::RenderWindow *window, float pInterpolation, ltbl::LightSyste
 
 	lightSystem->RenderLightTexture();
 
-	mPlayer.draw(window, pInterpolation);
-
 	for(int i = 0; i < mMap.getCurrentRoom()->getEnemyAmount(); i++)
 	{
 		mMap.getCurrentRoom()->getEnemy(i)->draw(window, pInterpolation);
+	}
+
+	mPlayer.draw(window, pInterpolation);
+
+	for(int i = 0; i < mLasers.size(); i++)
+	{
+		mLasers.at(i)->draw(window, pInterpolation);
 	}
 }
 
@@ -153,7 +259,16 @@ void Game::input(sf::Event *pEvent)
 
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 		{
-			mPlayer.setIsAttacking(true);
+			//TODO: take out is attacking
+			//TODO: player battery charge variable and deplete it
+			if(mPlayer.getPlayerState() == pUP)
+				addLaser(mPlayer.getPosition().x,mPlayer.getPosition().y - mPlayer.getSize().y/2,0,-4);
+			else if(mPlayer.getPlayerState() == pDOWN)
+				addLaser(mPlayer.getPosition().x,mPlayer.getPosition().y + mPlayer.getSize().y/2,0,4);
+			else if(mPlayer.getPlayerState() == pLEFT)
+				addLaser(mPlayer.getPosition().x - mPlayer.getSize().x/2,mPlayer.getPosition().y,-4,0);
+			else
+				addLaser(mPlayer.getPosition().x + mPlayer.getSize().x/2,mPlayer.getPosition().y,4,0);
 		}
 		break;
 	case(sf::Event::KeyReleased):
@@ -171,6 +286,17 @@ void Game::input(sf::Event *pEvent)
 	default:
 		break;
 	}
+}
+
+void Game::addLaser(float pX, float pY, float xVel, float yVel)
+{
+	mLasers.insert(mLasers.begin(), new Laser(sf::Vector2f(pX, pY), sf::Vector2f(xVel,yVel), sf::Vector2i(16,16), (mTextureHolder->getTexture(sLASER))));
+}
+
+void Game::removeLaser(int pIndex)
+{
+	delete(mLasers.at(pIndex));
+	mLasers.erase((mLasers.begin() + pIndex));
 }
 
 //handle memory leaks before quitting

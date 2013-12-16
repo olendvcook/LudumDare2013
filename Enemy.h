@@ -6,17 +6,12 @@
 
 //in this game ghost is implimented in enemy because ghost is so simple
 
-//update depending on what state enemy is in
-//TODO: is states for enemies as dumb as states for player?
-enum ENEMYSTATE { eLEFT, eRIGHT, eNONE };
-
 //extends AnimatedSprite so it has all of AnimatedSprites vars and methods
 class Enemy :
 	public AnimatedSprite
 {
-protected:
-	ENEMYSTATE mEnemyState;
 
+protected:
 	bool mIsActive;
 public:
 	Enemy(sf::Vector2f pPosition,  
@@ -29,11 +24,10 @@ public:
 	virtual ~Enemy(void);
 
 	//override animated sprite update method
-	virtual void update();
+	virtual void update(sf::Vector2f pPlayerPosition);
 
 	virtual bool getIsActive() {return mIsActive;}
 	virtual void setIsActive(bool pBool) { mIsActive = pBool; }
 
-	virtual void setEnemyState(ENEMYSTATE pEnemyState) { mEnemyState = pEnemyState; }
 };
 
