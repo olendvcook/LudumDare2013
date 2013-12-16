@@ -21,6 +21,7 @@ Game::Game(Textures *pTextureHolder,  sf::View * pView) :
 	*/
 
 	mView->reset(sf::FloatRect(0,0,WindowWidth,WindowHeight));
+	mView->zoom(0.5f);
 }
 
 void Game::reset()
@@ -44,7 +45,7 @@ Game::~Game(void)
 
 //Everything from update can be taken out / very specific to your game
 //left in as example
-void Game::update()
+void Game::update(ltbl::LightSystem * lightSystem, ltbl::Light_Point * light)
 {
 	mView->setCenter(mPlayer.getPosition());
 
@@ -94,15 +95,21 @@ void Game::update()
 	}
 
 	mPlayer.update();
+
+	light->SetCenter(Vec2f(mPlayer.getPosition().x, WindowHeight - mPlayer.getPosition().y)); 
+
+	lightSystem->RenderLights();
 }
 
 //just call draw of all entities
 //entities drawn first will be back layers
-void Game::draw(sf::RenderWindow *window, float pInterpolation)
+void Game::draw(sf::RenderWindow *window, float pInterpolation, ltbl::LightSystem * lightSystem)
 {
 	window->setView(*mView);
 
 	mMap.getCurrentRoom()->draw(window,pInterpolation);
+
+	lightSystem->RenderLightTexture();
 
 	mPlayer.draw(window, pInterpolation);
 
@@ -110,7 +117,6 @@ void Game::draw(sf::RenderWindow *window, float pInterpolation)
 	{
 		mMap.getCurrentRoom()->getEnemy(i)->draw(window, pInterpolation);
 	}
-
 }
 
 //get passed the input events do stuff based on event type

@@ -16,9 +16,6 @@ GameLoop::~GameLoop(void)
 
 void GameLoop::loop()
 {
-
-
-
 	mGameState = gMENU;
 	//Initialize variables to regulate update speed
 	sf::Clock clock;
@@ -30,6 +27,48 @@ void GameLoop::loop()
 	mWindow.create(sf::VideoMode(WindowWidth, WindowHeight), "Japanese Ghost Catcher");
 
 	mView.reset(sf::FloatRect(0,0,WindowWidth,WindowHeight));
+
+	ltbl::LightSystem ls(AABB(Vec2f(0.0f, 0.0f), Vec2f(static_cast<float>(WindowWidth), static_cast<float>(WindowHeight))), &mWindow, "data/lightFin.png", "data/shaders/lightAttenuationShader.frag");
+	
+	ltbl::Light_Point* dLight = new ltbl::Light_Point();
+	dLight->m_radius = static_cast<float>(WindowWidth);
+    dLight->m_size = 12.5f;
+	dLight->m_intensity = 1.5f;
+	dLight->m_spreadAngle = 2.0f * M_PI;
+	dLight->m_bleed = 0.0f;
+	dLight->m_linearizeFactor = 0.2f;
+
+    dLight->CalculateAABB();
+
+    ls.AddLight(dLight);
+
+	ltbl::ConvexHull * testHull = new ltbl::ConvexHull();
+
+	if(!testHull->LoadShape("data/testShape.txt"))
+		abort();
+
+	testHull->m_renderLightOverHull = false;
+
+	testHull->CalculateNormals();
+	testHull->CalculateAABB();
+
+	testHull->SetWorldCenter(Vec2f(208.0f, WindowHeight - 160.0f));
+
+	ls.AddConvexHull(testHull);
+
+	ltbl::ConvexHull * testHull2 = new ltbl::ConvexHull();
+
+	if(!testHull2->LoadShape("data/wallOne.txt"))
+		abort();
+
+	testHull2->m_renderLightOverHull = false;
+
+	testHull2->CalculateNormals();
+	testHull2->CalculateAABB();
+
+	testHull2->SetWorldCenter(Vec2f(16.0f, WindowHeight - 160.0f));
+
+	ls.AddConvexHull(testHull2);
 
 	//create container classes
 	Menu mMenu(&mTextureHolder);
@@ -43,6 +82,13 @@ void GameLoop::loop()
 
 		sf::Event event;
 
+		mWindow.setView(mView);
+		
+		dLight->TreeUpdate();
+
+		mWindow.setView(mWindow.getDefaultView());
+		ls.SetView(mWindow.getDefaultView());
+
 		//controls update speed
 		while (clock.getElapsedTime().asMilliseconds() > nextGameTick && loops < MAX_FRAMESKIP)
 		{
@@ -53,11 +99,13 @@ void GameLoop::loop()
 				mMenu.update();
 				break;
 			case(gGAME):
-				mGame.update();
+				mGame.update(&ls, dLight);
+				ls.RenderLights();
 				break;
 			case(gGAMEOVER):
 				break;
 			case(gPAUSED):
+				ls.RenderLights();
 			default:
 				break;
 			}
@@ -107,9 +155,8 @@ void GameLoop::loop()
 		interpolation = float(clock.getElapsedTime().asMilliseconds() + SKIP_TICKS - nextGameTick)
 			/ float(SKIP_TICKS);
 
-		mWindow.setView(mView);
-
 		gameOver.setPosition(mView.getCenter().x - WindowWidth/2, mView.getCenter().y - WindowHeight/2);
+
 		//draw methods here
 		switch(mGameState)
 		{
@@ -117,15 +164,16 @@ void GameLoop::loop()
 			mMenu.draw(&mWindow);
 			break;
 		case(gGAME):
-			mGame.draw(&mWindow, interpolation);
+			mGame.draw(&mWindow, interpolation, &ls);
 			break;
 		case(gGAMEOVER):
 			gameOver.setTexture(*mTextureHolder.getTexture(sGAMEOVER));
 			mWindow.draw(gameOver);
 			break;
 		case(gPAUSED):
-			mGame.draw(&mWindow, 0);
+			mGame.draw(&mWindow, interpolation, &ls);
 			gameOver.setTexture(*mTextureHolder.getTexture(sPAUSED));
+			ls.RenderLightTexture();
 			mWindow.draw(gameOver);
 			break;
 		case(gCOMPLETE):

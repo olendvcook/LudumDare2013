@@ -8,6 +8,7 @@
 #include "Enemy.h"
 #include "Tilemap.h"
 #include "Map.h"
+#include "LightSystem.h"
 
 //Handles the gameplay state, holds its entities like enemies and player would hold score etc...
 //Handles interaction between entities
@@ -37,8 +38,8 @@ public:
 	Game(Textures *pTextureHolder, sf::View * pView);
 	virtual ~Game(void);
 
-	void update();
-	void draw(sf::RenderWindow *window, float pInterpolation);
+	void update(ltbl::LightSystem * lightSystem, ltbl::Light_Point * light);
+	void draw(sf::RenderWindow *window, float pInterpolation, ltbl::LightSystem * lightSystem);
 	void input(sf::Event *pEvent);
 
 	//add and delete for each vector
