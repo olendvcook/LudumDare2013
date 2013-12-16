@@ -90,6 +90,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameLoop.cpp" />
     <ClCompile Include="GameOver.cpp" />
+    <ClCompile Include="Laser.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Menu.cpp" />
@@ -106,6 +107,7 @@
     <ClInclude Include="GameLoop.h" />
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="Includes.h" />
+    <ClInclude Include="Laser.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />

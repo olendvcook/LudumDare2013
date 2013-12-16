@@ -85,6 +85,21 @@ void Game::update()
 				continue;
 			}
 		}
+		//TODO ENEMIES COLLIDING
+		
+		for(int j = 0; j < mMap.getCurrentRoom()->getEnemyAmount(); j++)
+		{
+			if(j==i) continue;
+			if(tmpEnemyPtr->getBounds().intersects(mMap.getCurrentRoom()->getEnemy(j)->getBounds()))
+			{
+				tmpEnemyPtr->revertPosition();
+				tmpEnemyPtr->setVelocity(-tmpEnemyPtr->getVelocity().x,-tmpEnemyPtr->getVelocity().y);
+				mMap.getCurrentRoom()->getEnemy(j)->revertPosition();
+				//mMap.getCurrentRoom()->getEnemy(j)->setVelocity(0,0);
+				mMap.getCurrentRoom()->getEnemy(j)->setVelocity(-mMap.getCurrentRoom()->getEnemy(j)->getVelocity().x,-mMap.getCurrentRoom()->getEnemy(j)->getVelocity().y);
+			}
+		}
+		
 
 		for(int i = 0; i < mMap.getCurrentRoom()->getWallAmount(); i++)
 		{
@@ -93,7 +108,6 @@ void Game::update()
 			if(tmpWallPtr->getGlobalBounds().intersects(tmpEnemyPtr->getBounds()))
 			{
 				tmpEnemyPtr->revertPosition();
-				tmpEnemyPtr->setVelocity(0,0);
 			}
 		}
 
