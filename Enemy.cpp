@@ -13,15 +13,16 @@ Enemy::Enemy(sf::Vector2f pPosition,
 	AnimatedSprite(pPosition, pVelocity, pSize, pTexture, pAngle, pAngularVelocity),
 	mIsActive(pIsActive)
 {
+	counter = 0;
 
-	mAnimations.insert(mAnimations.begin(), Animation(8, 0.1, false));
-	mAnimations.insert(mAnimations.begin(), Animation(8, 0.1, false));
-	mAnimations.insert(mAnimations.begin(), Animation(8, 0.1, false));
-	mAnimations.insert(mAnimations.begin(), Animation(8, 0.1, false));
-	mAnimations.insert(mAnimations.end(), Animation(4, 0.1, false));
-	mAnimations.insert(mAnimations.end(), Animation(4, 0.1, false));
-	mAnimations.insert(mAnimations.end(), Animation(4, 0.1, false));
-	mAnimations.insert(mAnimations.end(), Animation(4, 0.1, false));
+	mAnimations.insert(mAnimations.begin(), Animation(8, 0.05, false));
+	mAnimations.insert(mAnimations.begin(), Animation(8, 0.05, false));
+	mAnimations.insert(mAnimations.begin(), Animation(8, 0.05, false));
+	mAnimations.insert(mAnimations.begin(), Animation(8, 0.05, false));
+	mAnimations.insert(mAnimations.end(), Animation(4, 0.05, false));
+	mAnimations.insert(mAnimations.end(), Animation(4, 0.05, false));
+	mAnimations.insert(mAnimations.end(), Animation(4, 0.05, false));
+	mAnimations.insert(mAnimations.end(), Animation(4, 0.05, false));
 	//start idle animation
 	AnimatedSprite::startAnimation();
 }
@@ -78,6 +79,42 @@ void Enemy::update(sf::Vector2f pPlayerPosition)
 		}
 
 		AnimatedSprite::update();
+	}
+	else
+	{
+		endAnimation();
+		if(mClock.getElapsedTime().asSeconds() > 0.1)
+		{
+			switch (counter)
+			{
+			case 0:
+				mCurrentAnimation = counter;
+				mAnimations.at(mCurrentAnimation).setCurrentFrame(0);
+				counter++;
+				break;
+			case 1:
+				mCurrentAnimation = counter;
+				mAnimations.at(mCurrentAnimation).setCurrentFrame(0);
+				counter++;
+				break;
+			case 2:
+				mCurrentAnimation = counter;
+				mAnimations.at(mCurrentAnimation).setCurrentFrame(0);
+				counter++;
+				break;
+			case 3:
+				mCurrentAnimation = counter;
+				mAnimations.at(mCurrentAnimation).setCurrentFrame(0);
+				counter++;
+				break;
+			default:
+				mCurrentAnimation = 7;
+				mAnimations.at(mCurrentAnimation).setCurrentFrame(6);
+				break;
+			}
+			mClock.restart();
+		}
+		
 	}
 
 	/*

@@ -23,5 +23,6 @@ public:
 	void animate();
 	void resetAnimation();
 	int getCurrentFrame() { return mCurrentFrame; }
+	void setCurrentFrame(int pIndex) { mCurrentFrame = pIndex;}
 };
 

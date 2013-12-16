@@ -24,6 +24,8 @@ private:
 
 	sf::View mView;
 
+	sf::Music mMusic;
+
 public:
 	GameLoop(void);
 	virtual ~GameLoop(void);

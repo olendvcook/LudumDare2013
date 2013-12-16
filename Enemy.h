@@ -12,6 +12,8 @@ class Enemy :
 {
 
 protected:
+	sf::Clock mClock;
+	int counter;
 	bool mIsActive;
 public:
 	Enemy(sf::Vector2f pPosition,  

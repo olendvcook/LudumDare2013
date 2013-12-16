@@ -10,6 +10,7 @@
 #include "Map.h"
 #include "LightSystem.h"
 #include "Laser.h"
+#include "ParticleEngine.h"
 
 //Handles the gameplay state, holds its entities like enemies and player would hold score etc...
 //Handles interaction between entities
@@ -20,9 +21,14 @@ class Game
 {
 private:
 	std::vector<Laser*> mLasers;
+
+	ParticleEngine particleEngine;
 	//store entities
 	Player mPlayer;
 	Map mMap;
+
+	sf::SoundBuffer mLaserSoundBuffer;
+	sf::Sound mLaserSound;
 
 	//drawing stuff
 	Textures *mTextureHolder;
