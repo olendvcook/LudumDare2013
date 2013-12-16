@@ -5,7 +5,7 @@
 GameLoop::GameLoop(void) :
 	mTextureHolder()
 {
-	mWindow.setVerticalSyncEnabled(true);
+
 	loop();
 }
 
@@ -16,6 +16,11 @@ GameLoop::~GameLoop(void)
 
 void GameLoop::loop()
 {
+	mWindow.setVerticalSyncEnabled(true);
+	mMusic.openFromFile("Assets/song.wav");
+	mMusic.setVolume(25);
+	mMusic.setLoop(true);
+	mMusic.play();
 
 	mGameState = gMENU;
 	//Initialize variables to regulate update speed

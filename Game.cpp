@@ -8,6 +8,10 @@ Game::Game(Textures *pTextureHolder,  sf::View * pView) :
 	mMap(pTextureHolder),
 	particleEngine(sf::Vector2f(-300,300),500, sf::Color::Red)
 {
+
+	mLaserSoundBuffer.loadFromFile("Assets/Laser_Shoot.wav");
+	mLaserSound.setBuffer(mLaserSoundBuffer);
+
 	particleEngine.setSize(10);
 	//text example
 	/*
@@ -324,6 +328,7 @@ void Game::input(sf::Event *pEvent)
 			else
 				addLaser(mPlayer.getPosition().x + mPlayer.getSize().x/2,mPlayer.getPosition().y,4,0);
 			mPlayer.setBatteryLevel(mPlayer.getBatterLevel() -1);
+			mLaserSound.play();
 			}
 		}
 

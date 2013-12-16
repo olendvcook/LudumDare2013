@@ -26,6 +26,9 @@ private:
 	Player mPlayer;
 	Map mMap;
 
+	sf::SoundBuffer mLaserSoundBuffer;
+	sf::Sound mLaserSound;
+
 	//drawing stuff
 	Textures *mTextureHolder;
 	sf::Sprite mBackground;
