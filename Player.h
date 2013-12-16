@@ -4,10 +4,15 @@
 //Extended from AnimatedSprite, also contains player specific stuff for the player
 //TODO: store Variable acceleration? should all sprites have acceleration?
 
+enum ePLAYERSTATE { pUP, pDOWN, pLEFT, pRIGHT };
+
+
 class Player :
 	public AnimatedSprite
 {
 protected:
+	ePLAYERSTATE mPLAYERSTATE;
+
 	bool isLeft;
 	bool isRight;
 	bool isUp;
@@ -30,4 +35,5 @@ public:
 	void setIsDown(bool pParam) { isDown = pParam; }
 	void setIsAttacking(bool pParam) { isAttacking = pParam; }
 	bool getIsAttacking() { return isAttacking; }
+	ePLAYERSTATE getPlayerState() { return mPLAYERSTATE; }
 };

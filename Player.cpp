@@ -1,7 +1,7 @@
 #include "Player.h"
 
 static const float mSpeed = 1.3;
-static const float mEnemySpeed = 5;
+static const float mMaxSpeed = 5;
 
 Player::Player(
 		sf::Vector2f pPosition, 
@@ -31,6 +31,7 @@ Player::Player(
 
 	//start playing idle animation
 	AnimatedSprite::startAnimation();
+	mPLAYERSTATE = pUP;
 
 }
 
@@ -48,12 +49,14 @@ void Player::update()
 	{
 		mVelocity.x = mSpeed;
 		mCurrentAnimation = 1;
+		mPLAYERSTATE = pRIGHT;
 	}
 	//move left
 	else if(isLeft && !isRight)
 	{
 		mVelocity.x = -mSpeed;
 		mCurrentAnimation = 3;
+		mPLAYERSTATE = pLEFT;
 	}
 	//come to a stop
 	else
@@ -66,12 +69,14 @@ void Player::update()
 	{
 		mVelocity.y = -mSpeed;
 		mCurrentAnimation = 0;
+		mPLAYERSTATE = pUP;
 	}
 	//move down
 	else if(isDown && !isUp)
 	{
 		mVelocity.y = mSpeed;
 		mCurrentAnimation = 2;
+		mPLAYERSTATE = pDOWN;
 	}
 	//come to a stop
 	else

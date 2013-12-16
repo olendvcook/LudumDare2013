@@ -2,7 +2,7 @@
 
 //takes in pointer to class that hold spritesheets so entities can be created with certain spritesheet
 Game::Game(Textures *pTextureHolder,  sf::View * pView) :
-	mTextures(pTextureHolder),
+	mTextureHolder(pTextureHolder),
 	mPlayer(sf::Vector2f(50,50), sf::Vector2f(0,0), sf::Vector2i(32,32), (pTextureHolder->getTexture(sPLAYER))),
 	mView(pView),
 	mMap(pTextureHolder)
@@ -23,6 +23,7 @@ Game::Game(Textures *pTextureHolder,  sf::View * pView) :
 	mView->reset(sf::FloatRect(0,0,WindowWidth,WindowHeight));
 	mView->zoom(0.5f);
 	mView->setCenter(mPlayer.getPosition());
+
 }
 
 void Game::reset()
@@ -47,8 +48,6 @@ Game::~Game(void)
 //left in as example
 void Game::update()
 {
-
-
 	//move view to follow player unless view would expose past the room, then stop moving to player
 	mView->setCenter(static_cast<int>(mPlayer.getOldPosition().x),static_cast<int>(mPlayer.getOldPosition().y));
 
@@ -69,6 +68,56 @@ void Game::update()
 		mView->setCenter(static_cast<int>(mView->getCenter().x), static_cast<int>(mMap.getCurrentRoom()->getRoomHeight() * mMap.getCurrentRoom()->getTileSize().y - mView->getSize().y/2));
 	}
 	
+
+	for(int i = 0; i < mLasers.size(); i++)
+	{
+		mLasers.at(i)->update();
+
+		if(mLasers.at(i)->getPosition().x < 0)
+		{
+			removeLaser(i);
+			continue;
+		}
+		else if(mLasers.at(i)->getPosition().y < 0)
+		{
+			removeLaser(i);
+			continue;
+		}
+		else if(mLasers.at(i)->getPosition().y > mMap.getCurrentRoom()->getRoomHeight() * mMap.getCurrentRoom()->getTileSize().y)
+		{
+			removeLaser(i);
+			continue;
+		}
+		else if(mLasers.at(i)->getPosition().y > mMap.getCurrentRoom()->getRoomWidth() * mMap.getCurrentRoom()->getTileSize().x)
+		{
+			removeLaser(i);
+			continue;
+		}
+
+		for(int j = 0; j < mMap.getCurrentRoom()->getWallAmount(); j++)
+		{
+			if(mLasers.at(i)->getBounds().intersects(mMap.getCurrentRoom()->getWall(j)->getGlobalBounds()))
+			{
+				//TODO: particles
+				removeLaser(i);
+				break;
+			}
+		}
+
+		for(int j = 0; j < mMap.getCurrentRoom()->getEnemyAmount(); j++)
+		{
+			if(mLasers.at(i)->getBounds().intersects(mMap.getCurrentRoom()->getEnemy(j)->getBounds()))
+			{
+				mMap.getCurrentRoom()->getEnemy(j)->setIsActive(false);
+				//TODO: particles
+				removeLaser(i);
+				break;
+			}
+		}
+
+	}
+
+
 
 	for(int i = 0; i < mMap.getCurrentRoom()->getEnemyAmount(); i++)
 	{	
@@ -166,6 +215,12 @@ void Game::draw(sf::RenderWindow *window, float pInterpolation)
 
 	mPlayer.draw(window, pInterpolation);
 
+	for(int i = 0; i < mLasers.size(); i++)
+	{
+		mLasers.at(i)->draw(window, pInterpolation);
+	}
+
+
 }
 
 //get passed the input events do stuff based on event type
@@ -202,7 +257,16 @@ void Game::input(sf::Event *pEvent)
 
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 		{
-			mPlayer.setIsAttacking(true);
+			//TODO: take out is attacking
+			//TODO: player battery charge variable and deplete it
+			if(mPlayer.getPlayerState() == pUP)
+				addLaser(mPlayer.getPosition().x,mPlayer.getPosition().y - mPlayer.getSize().y/2,0,-4);
+			else if(mPlayer.getPlayerState() == pDOWN)
+				addLaser(mPlayer.getPosition().x,mPlayer.getPosition().y + mPlayer.getSize().y/2,0,4);
+			else if(mPlayer.getPlayerState() == pLEFT)
+				addLaser(mPlayer.getPosition().x - mPlayer.getSize().x/2,mPlayer.getPosition().y,-4,0);
+			else
+				addLaser(mPlayer.getPosition().x + mPlayer.getSize().x/2,mPlayer.getPosition().y,4,0);
 		}
 		break;
 	case(sf::Event::KeyReleased):
@@ -220,6 +284,17 @@ void Game::input(sf::Event *pEvent)
 	default:
 		break;
 	}
+}
+
+void Game::addLaser(float pX, float pY, float xVel, float yVel)
+{
+	mLasers.insert(mLasers.begin(), new Laser(sf::Vector2f(pX, pY), sf::Vector2f(xVel,yVel), sf::Vector2i(16,16), (mTextureHolder->getTexture(sLASER))));
+}
+
+void Game::removeLaser(int pIndex)
+{
+	delete(mLasers.at(pIndex));
+	mLasers.erase((mLasers.begin() + pIndex));
 }
 
 //handle memory leaks before quitting

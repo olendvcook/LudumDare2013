@@ -76,6 +76,8 @@ void Enemy::update(sf::Vector2f pPlayerPosition)
 			mVelocity.x = 0;
 			mVelocity.y = 0;
 		}
+
+		AnimatedSprite::update();
 	}
 
 	/*
@@ -104,6 +106,5 @@ void Enemy::update(sf::Vector2f pPlayerPosition)
 	}
 	*/
 	//call superclass update that handles changing pos by velocity and animates
-	AnimatedSprite::update();
 }
 
