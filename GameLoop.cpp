@@ -16,15 +16,12 @@ GameLoop::~GameLoop(void)
 
 void GameLoop::loop()
 {
-<<<<<<< HEAD
-=======
 	mWindow.setVerticalSyncEnabled(true);
 	mMusic.openFromFile("Assets/song.wav");
 	mMusic.setVolume(25);
 	mMusic.setLoop(true);
 	mMusic.play();
 
->>>>>>> origin/master
 	mGameState = gMENU;
 	//Initialize variables to regulate update speed
 	sf::Clock clock;
