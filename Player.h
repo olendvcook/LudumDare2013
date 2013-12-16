@@ -18,6 +18,10 @@ protected:
 	bool isUp;
 	bool isDown;
 	bool isAttacking;
+
+	int mBatteryLevel;
+	int mPlayerHealth;
+
 public:
 	Player(void);
 	Player(
@@ -28,6 +32,7 @@ public:
 		float pAngle = 0, 
 		float pAngularVelocity = 0);
 	virtual ~Player(void);
+	void reset();
 	void update();
 	void setIsLeft(bool pParam) { isLeft = pParam; }
 	void setIsRight(bool pParam) { isRight = pParam; }
@@ -36,4 +41,8 @@ public:
 	void setIsAttacking(bool pParam) { isAttacking = pParam; }
 	bool getIsAttacking() { return isAttacking; }
 	ePLAYERSTATE getPlayerState() { return mPLAYERSTATE; }
+	int getBatterLevel() { return mBatteryLevel; }
+	int getPlayerHealth() { return mPlayerHealth; }
+	void setBatteryLevel(int pBatteryLevel) { mBatteryLevel = pBatteryLevel; }
+	void setPlayerHealth(int pPlayerHealth) { mPlayerHealth = pPlayerHealth; }
 };

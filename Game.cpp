@@ -30,11 +30,7 @@ void Game::reset()
 {
 	quit();
 	mPlayer.setPosition(50,50);
-	mPlayer.setIsLeft(false);
-	mPlayer.setIsRight(false);
-	mPlayer.setIsUp(false);
-	mPlayer.setIsDown(false);
-	mPlayer.setIsAttacking(false);
+	mPlayer.reset();
 }
 
 Game::~Game(void)
@@ -125,38 +121,38 @@ void Game::update()
 		//update enemy
 		Enemy* tmpEnemyPtr = mMap.getCurrentRoom()->getEnemy(i);
 
-		//collision detection with player
-		if(tmpEnemyPtr->getBounds().intersects(mPlayer.getBounds()))
+		if(tmpEnemyPtr->getIsActive())
 		{
-			if(mPlayer.getIsAttacking())
+			//collision detection with player
+			if(tmpEnemyPtr->getBounds().intersects(mPlayer.getBounds()))
 			{
+				mPlayer.setPlayerHealth(mPlayer.getPlayerHealth() - 1);
 				tmpEnemyPtr->setIsActive(false);
-				continue;
 			}
-		}
-		//TODO ENEMIES COLLIDING
+			//TODO ENEMIES COLLIDING
 		
-		for(int j = 0; j < mMap.getCurrentRoom()->getEnemyAmount(); j++)
-		{
-			if(j==i) continue;
-			if(tmpEnemyPtr->getBounds().intersects(mMap.getCurrentRoom()->getEnemy(j)->getBounds()))
+			for(int j = 0; j < mMap.getCurrentRoom()->getEnemyAmount(); j++)
 			{
-				tmpEnemyPtr->revertPosition();
-				tmpEnemyPtr->setVelocity(-tmpEnemyPtr->getVelocity().x,-tmpEnemyPtr->getVelocity().y);
-				mMap.getCurrentRoom()->getEnemy(j)->revertPosition();
-				//mMap.getCurrentRoom()->getEnemy(j)->setVelocity(0,0);
-				mMap.getCurrentRoom()->getEnemy(j)->setVelocity(-mMap.getCurrentRoom()->getEnemy(j)->getVelocity().x,-mMap.getCurrentRoom()->getEnemy(j)->getVelocity().y);
+				if(j==i) continue;
+				if(tmpEnemyPtr->getBounds().intersects(mMap.getCurrentRoom()->getEnemy(j)->getBounds()))
+				{
+					tmpEnemyPtr->revertPosition();
+					tmpEnemyPtr->setVelocity(-tmpEnemyPtr->getVelocity().x,-tmpEnemyPtr->getVelocity().y);
+					mMap.getCurrentRoom()->getEnemy(j)->revertPosition();
+					//mMap.getCurrentRoom()->getEnemy(j)->setVelocity(0,0);
+					mMap.getCurrentRoom()->getEnemy(j)->setVelocity(-mMap.getCurrentRoom()->getEnemy(j)->getVelocity().x,-mMap.getCurrentRoom()->getEnemy(j)->getVelocity().y);
+				}
 			}
-		}
 		
 
-		for(int i = 0; i < mMap.getCurrentRoom()->getWallAmount(); i++)
-		{
-			sf::Sprite* tmpWallPtr = mMap.getCurrentRoom()->getWall(i);
-
-			if(tmpWallPtr->getGlobalBounds().intersects(tmpEnemyPtr->getBounds()))
+			for(int i = 0; i < mMap.getCurrentRoom()->getWallAmount(); i++)
 			{
-				tmpEnemyPtr->revertPosition();
+				sf::Sprite* tmpWallPtr = mMap.getCurrentRoom()->getWall(i);
+
+				if(tmpWallPtr->getGlobalBounds().intersects(tmpEnemyPtr->getBounds()))
+				{
+					tmpEnemyPtr->revertPosition();
+				}
 			}
 		}
 
@@ -196,6 +192,11 @@ void Game::update()
 	{
 		mMap.setCurrentRoom(DOWN);
 		mPlayer.setPosition(mPlayer.getPosition().x, mPlayer.getSize().y/2);
+	}
+
+	if(mPlayer.getPlayerHealth() <= 0)
+	{
+		mGameState = gGAMEOVER;
 	}
 
 }
@@ -259,6 +260,8 @@ void Game::input(sf::Event *pEvent)
 		{
 			//TODO: take out is attacking
 			//TODO: player battery charge variable and deplete it
+			if(mPlayer.getBatterLevel() > 0)
+			{
 			if(mPlayer.getPlayerState() == pUP)
 				addLaser(mPlayer.getPosition().x,mPlayer.getPosition().y - mPlayer.getSize().y/2,0,-4);
 			else if(mPlayer.getPlayerState() == pDOWN)
@@ -267,6 +270,8 @@ void Game::input(sf::Event *pEvent)
 				addLaser(mPlayer.getPosition().x - mPlayer.getSize().x/2,mPlayer.getPosition().y,-4,0);
 			else
 				addLaser(mPlayer.getPosition().x + mPlayer.getSize().x/2,mPlayer.getPosition().y,4,0);
+			mPlayer.setBatteryLevel(mPlayer.getBatterLevel() -1);
+			}
 		}
 		break;
 	case(sf::Event::KeyReleased):

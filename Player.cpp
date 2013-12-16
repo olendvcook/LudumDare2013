@@ -10,7 +10,9 @@ Player::Player(
 		sf::Texture *pTexture,  
 		float pAngle, 
 		float pAngularVelocity) :
-	AnimatedSprite(pPosition, pVelocity, pSize, pTexture, pAngle, pAngularVelocity)
+	AnimatedSprite(pPosition, pVelocity, pSize, pTexture, pAngle, pAngularVelocity),
+		mBatteryLevel(5),
+		mPlayerHealth(3)
 {
 	isLeft = false;
 	isRight = false;
@@ -37,6 +39,16 @@ Player::Player(
 
 Player::~Player(void)
 {
+}
+
+void Player::reset()
+{
+	mPlayerHealth = 3;
+	mBatteryLevel = 5;
+	isLeft = false;
+	isRight = false;
+	isUp = false;
+	isDown = false;
 }
 
 //all this to just move left and right with acceleration

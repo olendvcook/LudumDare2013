@@ -25,7 +25,7 @@ void GameLoop::loop()
 	float interpolation;
 	//--------------------------------------------
 	//create window
-	mWindow.create(sf::VideoMode(WindowWidth, WindowHeight), "Japanese Ghost Catcher");
+	mWindow.create(sf::VideoMode(WindowWidth, WindowHeight), "Rad Robot vs The Space Mutants");
 
 	mView.reset(sf::FloatRect(0,0,WindowWidth,WindowHeight));
 
@@ -34,6 +34,8 @@ void GameLoop::loop()
 	Game mGame(&mTextureHolder, &mView);
 
 	gameOver.setScale(0.5,0.5);
+
+	mWindow.setKeyRepeatEnabled(false);
 
 	//game loop
 	while (mWindow.isOpen())
