@@ -5,8 +5,10 @@ Game::Game(Textures *pTextureHolder,  sf::View * pView) :
 	mTextureHolder(pTextureHolder),
 	mPlayer(pTextureHolder, sf::Vector2f(50,50), sf::Vector2f(0,0), sf::Vector2i(32,32), (pTextureHolder->getTexture(sPLAYER))),
 	mView(pView),
-	mMap(pTextureHolder)
+	mMap(pTextureHolder),
+	particleEngine(sf::Vector2f(-300,300),500, sf::Color::Red)
 {
+	particleEngine.setSize(10);
 	//text example
 	/*
 	mFont.loadFromFile("Assets/galaxymonkey.ttf");
@@ -44,6 +46,9 @@ Game::~Game(void)
 //left in as example
 void Game::update()
 {
+
+	particleEngine.Update(0, true);
+
 	//move view to follow player unless view would expose past the room, then stop moving to player
 	mView->setCenter(static_cast<int>(mPlayer.getOldPosition().x),static_cast<int>(mPlayer.getOldPosition().y));
 
@@ -94,6 +99,15 @@ void Game::update()
 		{
 			if(mLasers.at(i)->getBounds().intersects(mMap.getCurrentRoom()->getWall(j)->getGlobalBounds()))
 			{
+				particleEngine.setEmitterLocation(mLasers.at(i)->getPosition());
+				if(mLasers.at(i)->getVelocity().x > 0)
+					particleEngine.Refill(30,pdLEFT);
+				else if(mLasers.at(i)->getVelocity().x < 0)
+					particleEngine.Refill(30,pdRIGHT);
+				else if(mLasers.at(i)->getVelocity().y < 0)
+					particleEngine.Refill(30,pdDOWN);
+				else
+					particleEngine.Refill(30);
 				//TODO: particles
 				removeLaser(i);
 				break;
@@ -104,6 +118,15 @@ void Game::update()
 		{
 			if(mLasers.at(i)->getBounds().intersects(mMap.getCurrentRoom()->getEnemy(j)->getBounds()))
 			{
+				particleEngine.setEmitterLocation(mLasers.at(i)->getPosition());
+				if(mLasers.at(i)->getVelocity().x > 0)
+					particleEngine.Refill(30,pdLEFT);
+				else if(mLasers.at(i)->getVelocity().x < 0)
+					particleEngine.Refill(30,pdRIGHT);
+				else if(mLasers.at(i)->getVelocity().y < 0)
+					particleEngine.Refill(30,pdDOWN);
+				else
+					particleEngine.Refill(30);
 				mMap.getCurrentRoom()->getEnemy(j)->setIsActive(false);
 				//TODO: particles
 				removeLaser(i);
@@ -248,6 +271,8 @@ void Game::draw(sf::RenderWindow *window, float pInterpolation)
 	{
 		mLasers.at(i)->draw(window, pInterpolation);
 	}
+
+	particleEngine.Draw(window,pInterpolation);
 
 
 }
