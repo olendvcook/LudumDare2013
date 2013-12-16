@@ -3,7 +3,7 @@
 //takes in pointer to class that hold spritesheets so entities can be created with certain spritesheet
 Game::Game(Textures *pTextureHolder,  sf::View * pView) :
 	mTextureHolder(pTextureHolder),
-	mPlayer(sf::Vector2f(50,50), sf::Vector2f(0,0), sf::Vector2i(32,32), (pTextureHolder->getTexture(sPLAYER))),
+	mPlayer(pTextureHolder, sf::Vector2f(50,50), sf::Vector2f(0,0), sf::Vector2i(32,32), (pTextureHolder->getTexture(sPLAYER))),
 	mView(pView),
 	mMap(pTextureHolder)
 {
@@ -30,11 +30,7 @@ void Game::reset()
 {
 	quit();
 	mPlayer.setPosition(50,50);
-	mPlayer.setIsLeft(false);
-	mPlayer.setIsRight(false);
-	mPlayer.setIsUp(false);
-	mPlayer.setIsDown(false);
-	mPlayer.setIsAttacking(false);
+	mPlayer.reset();
 }
 
 Game::~Game(void)
@@ -125,38 +121,38 @@ void Game::update(ltbl::LightSystem * lightSystem, ltbl::Light_Point * light)
 		//update enemy
 		Enemy* tmpEnemyPtr = mMap.getCurrentRoom()->getEnemy(i);
 
-		//collision detection with player
-		if(tmpEnemyPtr->getBounds().intersects(mPlayer.getBounds()))
+		if(tmpEnemyPtr->getIsActive())
 		{
-			if(mPlayer.getIsAttacking())
+			//collision detection with player
+			if(tmpEnemyPtr->getBounds().intersects(mPlayer.getBounds()))
 			{
+				mPlayer.setPlayerHealth(mPlayer.getPlayerHealth() - 1);
 				tmpEnemyPtr->setIsActive(false);
-				continue;
 			}
-		}
-		//TODO ENEMIES COLLIDING
+			//TODO ENEMIES COLLIDING
 		
-		for(int j = 0; j < mMap.getCurrentRoom()->getEnemyAmount(); j++)
-		{
-			if(j==i) continue;
-			if(tmpEnemyPtr->getBounds().intersects(mMap.getCurrentRoom()->getEnemy(j)->getBounds()))
+			for(int j = 0; j < mMap.getCurrentRoom()->getEnemyAmount(); j++)
 			{
-				tmpEnemyPtr->revertPosition();
-				tmpEnemyPtr->setVelocity(-tmpEnemyPtr->getVelocity().x,-tmpEnemyPtr->getVelocity().y);
-				mMap.getCurrentRoom()->getEnemy(j)->revertPosition();
-				//mMap.getCurrentRoom()->getEnemy(j)->setVelocity(0,0);
-				mMap.getCurrentRoom()->getEnemy(j)->setVelocity(-mMap.getCurrentRoom()->getEnemy(j)->getVelocity().x,-mMap.getCurrentRoom()->getEnemy(j)->getVelocity().y);
+				if(j==i) continue;
+				if(tmpEnemyPtr->getBounds().intersects(mMap.getCurrentRoom()->getEnemy(j)->getBounds()))
+				{
+					tmpEnemyPtr->revertPosition();
+					tmpEnemyPtr->setVelocity(-tmpEnemyPtr->getVelocity().x,-tmpEnemyPtr->getVelocity().y);
+					mMap.getCurrentRoom()->getEnemy(j)->revertPosition();
+					//mMap.getCurrentRoom()->getEnemy(j)->setVelocity(0,0);
+					mMap.getCurrentRoom()->getEnemy(j)->setVelocity(-mMap.getCurrentRoom()->getEnemy(j)->getVelocity().x,-mMap.getCurrentRoom()->getEnemy(j)->getVelocity().y);
+				}
 			}
-		}
 		
 
-		for(int i = 0; i < mMap.getCurrentRoom()->getWallAmount(); i++)
-		{
-			sf::Sprite* tmpWallPtr = mMap.getCurrentRoom()->getWall(i);
-
-			if(tmpWallPtr->getGlobalBounds().intersects(tmpEnemyPtr->getBounds()))
+			for(int i = 0; i < mMap.getCurrentRoom()->getWallAmount(); i++)
 			{
-				tmpEnemyPtr->revertPosition();
+				sf::Sprite* tmpWallPtr = mMap.getCurrentRoom()->getWall(i);
+
+				if(tmpWallPtr->getGlobalBounds().intersects(tmpEnemyPtr->getBounds()))
+				{
+					tmpEnemyPtr->revertPosition();
+				}
 			}
 		}
 
@@ -200,6 +196,34 @@ void Game::update(ltbl::LightSystem * lightSystem, ltbl::Light_Point * light)
 	light->SetCenter(Vec2f(mPlayer.getPosition().x, WindowHeight - mPlayer.getPosition().y)); 
 
 	lightSystem->RenderLights();
+
+	if(mPlayer.getPlayerHealth() <= 0)
+	{
+		mGameState = gGAMEOVER;
+	}
+
+	for(int i = 0; i < mMap.getCurrentRoom()->getObjectAmount(); i++)
+	{
+		Object* tmpObjectPtr = mMap.getCurrentRoom()->getObject(i);
+
+		tmpObjectPtr->update();
+
+		if(tmpObjectPtr->getBounds().intersects(mPlayer.getBounds()))
+		{
+			switch (tmpObjectPtr->getObjectType())
+			{
+			case oBATTERY:
+				mPlayer.setBatteryLevel(mPlayer.getBatterLevel() + 2);
+				if(mPlayer.getBatterLevel() > 5)
+					mPlayer.setBatteryLevel(5);
+				mMap.getCurrentRoom()->removeObject(i);
+				break;
+			case oENGINE:
+				mGameState = gCOMPLETE;
+				break;
+			}
+		}
+	}
 }
 
 //just call draw of all entities
@@ -215,6 +239,11 @@ void Game::draw(sf::RenderWindow *window, float pInterpolation, ltbl::LightSyste
 	for(int i = 0; i < mMap.getCurrentRoom()->getEnemyAmount(); i++)
 	{
 		mMap.getCurrentRoom()->getEnemy(i)->draw(window, pInterpolation);
+	}
+
+	for(int i = 0; i < mMap.getCurrentRoom()->getObjectAmount(); i++)
+	{
+		mMap.getCurrentRoom()->getObject(i)->draw(window, pInterpolation);
 	}
 
 	mPlayer.draw(window, pInterpolation);
@@ -261,6 +290,8 @@ void Game::input(sf::Event *pEvent)
 		{
 			//TODO: take out is attacking
 			//TODO: player battery charge variable and deplete it
+			if(mPlayer.getBatterLevel() > 0)
+			{
 			if(mPlayer.getPlayerState() == pUP)
 				addLaser(mPlayer.getPosition().x,mPlayer.getPosition().y - mPlayer.getSize().y/2,0,-4);
 			else if(mPlayer.getPlayerState() == pDOWN)
@@ -269,6 +300,17 @@ void Game::input(sf::Event *pEvent)
 				addLaser(mPlayer.getPosition().x - mPlayer.getSize().x/2,mPlayer.getPosition().y,-4,0);
 			else
 				addLaser(mPlayer.getPosition().x + mPlayer.getSize().x/2,mPlayer.getPosition().y,4,0);
+			mPlayer.setBatteryLevel(mPlayer.getBatterLevel() -1);
+			}
+		}
+
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+		{
+			mPlayer.setIsHealthDisplay(true);
+		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+		{
+			mPlayer.setIsBatteryDisplay(true);
 		}
 		break;
 	case(sf::Event::KeyReleased):
@@ -280,8 +322,10 @@ void Game::input(sf::Event *pEvent)
 			mPlayer.setIsDown(false);
 		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 			mPlayer.setIsUp(false);
-		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-			mPlayer.setIsAttacking(false);
+		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+			mPlayer.setIsHealthDisplay(false);
+		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+			mPlayer.setIsBatteryDisplay(false);
 		break;
 	default:
 		break;

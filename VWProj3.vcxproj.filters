@@ -103,6 +103,12 @@
 >>>>>>> origin/master
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Hud.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -197,6 +203,12 @@
 =======
     <ClInclude Include="Laser.h">
 >>>>>>> origin/master
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Hud.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

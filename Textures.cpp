@@ -61,6 +61,9 @@ Textures::Textures(void)
 
 	texture1.loadFromFile("Assets/titlespaceship.png");
 	mSheets.insert(mSheets.end(), texture1);
+
+	texture1.loadFromFile("Assets/hologramtriangle.png");
+	mSheets.insert(mSheets.end(), texture1);
 	
 }
 

@@ -23,7 +23,7 @@ Room::~Room(void)
 
 void Room::generateObjects(int pObjectLayer[])
 {
-	enum Objects {NONE, WALLS, ENEMY, BATTERY, ETC/*fill this out when we have all our objects*/};
+	enum Objects {NONE, WALLS, ENEMY, BATTERY, ENGINE, ETC/*fill this out when we have all our objects*/};
 	for(int i = 0; i < mRoomWidth; i++)
 	{
 		for(int j = 0; j < mRoomHeight; j++)
@@ -40,6 +40,10 @@ void Room::generateObjects(int pObjectLayer[])
 				break;
 			case(BATTERY):
 				//add battery
+				addObject(i * mTileSize.x + mTileSize.x/2, j * mTileSize.y + mTileSize.y/2, oBATTERY);
+				break;
+			case(ENGINE):
+				addObject(i * mTileSize.x + mTileSize.x/2, j * mTileSize.y + mTileSize.y/2, oENGINE);
 				break;
 			case(NONE):
 				//dont do anything
@@ -90,11 +94,22 @@ void Room::removeWall(int pIndex)
 }
 
 //TODO: these methods when we have objects
-void Room::addObject(float pXpos, float pYpos)
+void Room::addObject(float pXpos, float pYpos, OBJECTTYPE pOBJECTTYPE)
 {
+	switch(pOBJECTTYPE)
+	{
+		case oBATTERY:
+			mObjects.insert(mObjects.begin(), new Object(sf::Vector2f(pXpos, pYpos), sf::Vector2i(32,32), (mTextureHolder->getTexture(sBATTERY)), oBATTERY));
+			break;
+		case oENGINE:
+			mObjects.insert(mObjects.begin(), new Object(sf::Vector2f(pXpos, pYpos), sf::Vector2i(32,32), (mTextureHolder->getTexture(sENGINE)), oENGINE));
+			break;
+	}
 }
 
 void Room::removeObject(int pIndex)
 {
+	delete(mObjects.at(pIndex));
+	mObjects.erase((mObjects.begin() + pIndex));
 }
 //---------------------------------------
