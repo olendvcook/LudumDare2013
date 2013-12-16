@@ -1,6 +1,6 @@
 #include "Player.h"
 
-static const float mSpeed = 1.3;
+static const float mSpeed = 3;
 
 Player::Player(
 		Textures* pTextureHolder,

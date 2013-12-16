@@ -24,7 +24,7 @@ void GameLoop::loop()
 	float interpolation;
 	//--------------------------------------------
 	//create window
-	mWindow.create(sf::VideoMode(WindowWidth, WindowHeight), "Rad Robot vs The Space Mutants");
+	mWindow.create(sf::VideoMode(WindowWidth, WindowHeight), "Rad Robot versus The Space Mutants - VW - 0.1");
 
 	mView.reset(sf::FloatRect(0,0,WindowWidth,WindowHeight));
 
@@ -70,6 +70,62 @@ void GameLoop::loop()
 
 	ls.AddConvexHull(testHull2);
 
+	ltbl::ConvexHull * testHull3 = new ltbl::ConvexHull();
+
+	if(!testHull3->LoadShape("data/wallTwo.txt"))
+		abort();
+
+	testHull3->m_renderLightOverHull = false;
+
+	testHull3->CalculateNormals();
+	testHull3->CalculateAABB();
+
+	testHull3->SetWorldCenter(Vec2f(170.0f, WindowHeight - 16.0f));
+
+	ls.AddConvexHull(testHull3);
+
+	ltbl::ConvexHull * testHull4 = new ltbl::ConvexHull();
+
+	if(!testHull4->LoadShape("data/wallThree.txt"))
+		abort();
+
+	testHull4->m_renderLightOverHull = false;
+
+	testHull4->CalculateNormals();
+	testHull4->CalculateAABB();
+
+	testHull4->SetWorldCenter(Vec2f(304.0f, WindowHeight - 80.0f));
+
+	ls.AddConvexHull(testHull4);
+
+	ltbl::ConvexHull * testHull5 = new ltbl::ConvexHull();
+
+	if(!testHull5->LoadShape("data/wallTwo.txt"))
+		abort();
+
+	testHull5->m_renderLightOverHull = false;
+
+	testHull5->CalculateNormals();
+	testHull5->CalculateAABB();
+
+	testHull5->SetWorldCenter(Vec2f(170.0f, WindowHeight - 304.0f));
+
+	ls.AddConvexHull(testHull5);
+
+	ltbl::ConvexHull * testHull6 = new ltbl::ConvexHull();
+
+	if(!testHull6->LoadShape("data/wallThree.txt"))
+		abort();
+
+	testHull6->m_renderLightOverHull = false;
+
+	testHull6->CalculateNormals();
+	testHull6->CalculateAABB();
+
+	testHull6->SetWorldCenter(Vec2f(304.0f, WindowHeight - 240.0f));
+
+	ls.AddConvexHull(testHull6);
+
 	//create container classes
 	Menu mMenu(&mTextureHolder);
 	Game mGame(&mTextureHolder, &mView);
@@ -109,7 +165,6 @@ void GameLoop::loop()
 			case(gGAMEOVER):
 				break;
 			case(gPAUSED):
-				ls.RenderLights();
 			default:
 				break;
 			}
@@ -171,7 +226,7 @@ void GameLoop::loop()
 			break;
 		case(gGAME):
 			mWindow.setView(mView);
-			mGame.draw(&mWindow, interpolation);
+			mGame.draw(&mWindow, interpolation, &ls);
 			break;
 		case(gGAMEOVER):
 			gameOver.setTexture(*mTextureHolder.getTexture(sGAMEOVER));

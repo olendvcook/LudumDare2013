@@ -6,13 +6,7 @@
 //Extended from AnimatedSprite, also contains player specific stuff for the player
 //TODO: store Variable acceleration? should all sprites have acceleration?
 
-<<<<<<< HEAD
-static const float mSpeed = 3;
-static const float mMaxSpeed = 6;
-=======
 enum ePLAYERSTATE { pUP, pDOWN, pLEFT, pRIGHT };
-
->>>>>>> origin/master
 
 class Player :
 	public AnimatedSprite

@@ -24,6 +24,8 @@ Game::Game(Textures *pTextureHolder,  sf::View * pView) :
 	mView->zoom(0.5f);
 
 	mView->setCenter(mPlayer.getPosition());
+
+	lighting = false;
 }
 
 void Game::reset()
@@ -193,9 +195,12 @@ void Game::update(ltbl::LightSystem * lightSystem, ltbl::Light_Point * light)
 		mPlayer.setPosition(mPlayer.getPosition().x, mPlayer.getSize().y/2);
 	}
 
-	light->SetCenter(Vec2f(mPlayer.getPosition().x, WindowHeight - mPlayer.getPosition().y)); 
+	if (lighting)
+	{
+		light->SetCenter(Vec2f(mPlayer.getPosition().x, WindowHeight - mPlayer.getPosition().y)); 
 
-	lightSystem->RenderLights();
+		lightSystem->RenderLights();
+	}
 
 	if(mPlayer.getPlayerHealth() <= 0)
 	{
@@ -234,8 +239,6 @@ void Game::draw(sf::RenderWindow *window, float pInterpolation, ltbl::LightSyste
 
 	mMap.getCurrentRoom()->draw(window,pInterpolation);
 
-	lightSystem->RenderLightTexture();
-
 	for(int i = 0; i < mMap.getCurrentRoom()->getEnemyAmount(); i++)
 	{
 		mMap.getCurrentRoom()->getEnemy(i)->draw(window, pInterpolation);
@@ -252,6 +255,9 @@ void Game::draw(sf::RenderWindow *window, float pInterpolation, ltbl::LightSyste
 	{
 		mLasers.at(i)->draw(window, pInterpolation);
 	}
+
+	if (lighting)
+		lightSystem->RenderLightTexture();
 }
 
 //get passed the input events do stuff based on event type
@@ -303,6 +309,9 @@ void Game::input(sf::Event *pEvent)
 			mPlayer.setBatteryLevel(mPlayer.getBatterLevel() -1);
 			}
 		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSlash))
+			lighting = !lighting;
 
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 		{

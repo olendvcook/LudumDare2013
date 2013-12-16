@@ -32,7 +32,7 @@ private:
 
 	sf::View* mView;
 
-
+	bool lighting;
 	
 
 public:
