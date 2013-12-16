@@ -43,6 +43,7 @@ void GameLoop::loop()
 	dLight->m_spreadAngle = 2.0f * M_PI;
 	dLight->m_bleed = 0.0f;
 	dLight->m_linearizeFactor = 0.2f;
+	dLight->m_color = (Color3f(0.5f, 0.5f, 0.5f));
 
     dLight->CalculateAABB();
 
@@ -241,7 +242,8 @@ void GameLoop::loop()
 		case(gPAUSED):
 			mGame.draw(&mWindow, interpolation, &ls);
 			gameOver.setTexture(*mTextureHolder.getTexture(sPAUSED));
-			ls.RenderLightTexture();
+			if (mGame.lighting)
+				ls.RenderLightTexture();
 			mWindow.draw(gameOver);
 			break;
 		case(gCOMPLETE):

@@ -37,11 +37,10 @@ private:
 
 
 	sf::View* mView;
-
-	bool lighting;
 	
 
 public:
+	bool lighting;
 
 	Game(Textures *pTextureHolder, sf::View * pView);
 	virtual ~Game(void);
