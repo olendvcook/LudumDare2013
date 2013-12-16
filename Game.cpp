@@ -29,7 +29,8 @@ Game::Game(Textures *pTextureHolder,  sf::View * pView) :
 	mView->reset(sf::FloatRect(0,0,WindowWidth,WindowHeight));
 	mView->zoom(0.5f);
 
-	mView->setCenter(mPlayer.getPosition());
+	//mView->setCenter(mPlayer.getPosition());
+	mView->setCenter(static_cast<int>(mView->getSize().x/2), static_cast<int>(mView->getSize().y/2));
 
 	lighting = false;
 }
@@ -321,7 +322,7 @@ void Game::input(sf::Event *pEvent)
 			mGameState = gPAUSED;
 		}
 
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 		{
 			//TODO: take out is attacking
 			//TODO: player battery charge variable and deplete it
@@ -343,11 +344,11 @@ void Game::input(sf::Event *pEvent)
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSlash))
 			lighting = !lighting;
 
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::E) || sf::Keyboard::isKeyPressed(sf::Keyboard::T))
 		{
 			mPlayer.setIsHealthDisplay(true);
 		}
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::Y))
 		{
 			mPlayer.setIsBatteryDisplay(true);
 		}
@@ -361,9 +362,9 @@ void Game::input(sf::Event *pEvent)
 			mPlayer.setIsDown(false);
 		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 			mPlayer.setIsUp(false);
-		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::E) || sf::Keyboard::isKeyPressed(sf::Keyboard::T))
 			mPlayer.setIsHealthDisplay(false);
-		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::Y))
 			mPlayer.setIsBatteryDisplay(false);
 		break;
 	default:
