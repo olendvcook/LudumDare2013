@@ -2,6 +2,7 @@
 #include "Tilemap.h"
 #include "Enemy.h"
 #include "Textures.h"
+#include "Object.h"
 
 //Hold the information for each room like tilemap background, enemies and objects, etc
 class Room
@@ -14,7 +15,7 @@ private:
 	std::vector<sf::Sprite*> mWalls;
 	std::vector<Enemy*> mEnemies;
 	//stuff on the ground like batteries, collectables
-	//std::vector<Objects*> mObjects;
+	std::vector<Object*> mObjects;
 
 	int mRoomWidth;
 	int mRoomHeight;
@@ -31,13 +32,13 @@ public:
 	int getEnemyAmount() {return mEnemies.size();}
 	sf::Sprite* getWall(int pIndex) {return mWalls[pIndex];}
 	int getWallAmount() {return mWalls.size();}
-	//Objects* getObject(int pIndex) {return mObjects[pIndex];}
-	//int getObjectAmount() {return mObjects.size()}
+	Object* getObject(int pIndex) {return mObjects[pIndex];}
+	int getObjectAmount() {return mObjects.size();}
 
 	void draw(sf::RenderWindow *window, float pInterpolation);
 	void addEnemy(float pXpos, float pYpos);
 	void removeEnemy(int pIndex);
-	void addObject(float pXpos, float pYpos);
+	void addObject(float pXpos, float pYpos, OBJECTTYPE pOBJECTTYPE);
 	void removeObject(int pIndex);
 	void addWall(float pXpos, float pYpos);
 	void removeWall(int pIndex);

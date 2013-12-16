@@ -199,6 +199,29 @@ void Game::update()
 		mGameState = gGAMEOVER;
 	}
 
+	for(int i = 0; i < mMap.getCurrentRoom()->getObjectAmount(); i++)
+	{
+		Object* tmpObjectPtr = mMap.getCurrentRoom()->getObject(i);
+
+		tmpObjectPtr->update();
+
+		if(tmpObjectPtr->getBounds().intersects(mPlayer.getBounds()))
+		{
+			switch (tmpObjectPtr->getObjectType())
+			{
+			case oBATTERY:
+				mPlayer.setBatteryLevel(mPlayer.getBatterLevel() + 2);
+				if(mPlayer.getBatterLevel() > 5)
+					mPlayer.setBatteryLevel(5);
+				mMap.getCurrentRoom()->removeObject(i);
+				break;
+			case oENGINE:
+				mGameState = gCOMPLETE;
+				break;
+			}
+		}
+	}
+
 }
 
 //just call draw of all entities
@@ -212,6 +235,11 @@ void Game::draw(sf::RenderWindow *window, float pInterpolation)
 	for(int i = 0; i < mMap.getCurrentRoom()->getEnemyAmount(); i++)
 	{
 		mMap.getCurrentRoom()->getEnemy(i)->draw(window, pInterpolation);
+	}
+
+	for(int i = 0; i < mMap.getCurrentRoom()->getObjectAmount(); i++)
+	{
+		mMap.getCurrentRoom()->getObject(i)->draw(window, pInterpolation);
 	}
 
 	mPlayer.draw(window, pInterpolation);
