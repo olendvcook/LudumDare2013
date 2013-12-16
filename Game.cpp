@@ -75,7 +75,6 @@ void Game::update()
 
 		//update enemy
 		Enemy* tmpEnemyPtr = mMap.getCurrentRoom()->getEnemy(i);
-		tmpEnemyPtr->update();
 
 		//collision detection with player
 		if(tmpEnemyPtr->getBounds().intersects(mPlayer.getBounds()))
@@ -86,6 +85,19 @@ void Game::update()
 				continue;
 			}
 		}
+
+		for(int i = 0; i < mMap.getCurrentRoom()->getWallAmount(); i++)
+		{
+			sf::Sprite* tmpWallPtr = mMap.getCurrentRoom()->getWall(i);
+
+			if(tmpWallPtr->getGlobalBounds().intersects(tmpEnemyPtr->getBounds()))
+			{
+				tmpEnemyPtr->revertPosition();
+				tmpEnemyPtr->setVelocity(0,0);
+			}
+		}
+
+		tmpEnemyPtr->update(mPlayer.getPosition());
 	}
 
 	for(int i = 0; i < mMap.getCurrentRoom()->getWallAmount(); i++)
@@ -133,12 +145,12 @@ void Game::draw(sf::RenderWindow *window, float pInterpolation)
 
 	mMap.getCurrentRoom()->draw(window,pInterpolation);
 
-	mPlayer.draw(window, pInterpolation);
-
 	for(int i = 0; i < mMap.getCurrentRoom()->getEnemyAmount(); i++)
 	{
 		mMap.getCurrentRoom()->getEnemy(i)->draw(window, pInterpolation);
 	}
+
+	mPlayer.draw(window, pInterpolation);
 
 }
 

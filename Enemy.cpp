@@ -1,5 +1,6 @@
 #include "Enemy.h"
 
+static const float mEnemySpeed = 0.2;
 
 Enemy::Enemy(sf::Vector2f pPosition,  
 		sf::Vector2i pSize, 
@@ -12,8 +13,11 @@ Enemy::Enemy(sf::Vector2f pPosition,
 	AnimatedSprite(pPosition, pVelocity, pSize, pTexture, pAngle, pAngularVelocity),
 	mIsActive(pIsActive)
 {
-	//insert animations based on Enemy spriteSheet
-	mAnimations.insert(mAnimations.begin(), Animation(4, 0.2, false));
+
+	mAnimations.insert(mAnimations.begin(), Animation(8, 0.1, false));
+	mAnimations.insert(mAnimations.begin(), Animation(8, 0.1, false));
+	mAnimations.insert(mAnimations.begin(), Animation(8, 0.1, false));
+	mAnimations.insert(mAnimations.begin(), Animation(8, 0.1, false));
 	//start idle animation
 	AnimatedSprite::startAnimation();
 }
@@ -23,9 +27,43 @@ Enemy::~Enemy(void)
 }
 
 //update based on what state we are in
-void Enemy::update()
+void Enemy::update(sf::Vector2f pPlayerPosition)
 {
+	if(mIsActive)
+	{
+		float dx = pPlayerPosition.x - mPosition.x;
+		float dy = pPlayerPosition.y - mPosition.y;
+		float length = sqrtf(dx*dx + dy*dy);
+		float angle = atan2f(dy,dx);
 
+		if(angle >= -2.25 && angle <= -.75)
+			setCurrentAnimation(0);
+		else if (angle > -.75 && angle <= .75)
+			setCurrentAnimation(1);
+		else if (angle >.75 && angle <= 2.25)
+			setCurrentAnimation(2);
+		else
+			setCurrentAnimation(3);
+
+		if(length <= 100)
+		{
+			dx /= length;
+			dy /= length;
+
+			mVelocity.x = dx*mEnemySpeed;
+			mVelocity.y = dy*mEnemySpeed;
+			startAnimation();
+
+		}
+		else
+		{
+			mVelocity.x = 0;
+			mVelocity.y = 0;
+			endAnimation();
+		}
+	}
+
+	/*
 	//check bounds with right and left side of screen
 	if(mPosition.x <= 32 + mSize.x/2)
 	{
@@ -49,7 +87,7 @@ void Enemy::update()
 		mPosition.y = 32 * 32 - (mSize.y/2 + 32);
 		mVelocity.y = -mVelocity.y;
 	}
-
+	*/
 	//call superclass update that handles changing pos by velocity and animates
 	AnimatedSprite::update();
 }

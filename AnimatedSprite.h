@@ -29,6 +29,7 @@ protected:
 	
 	bool mIsAnimating;
 
+
 	//array of class Animation to store all the different Animations like Idle/Walk/Jump
 	std::vector<Animation> mAnimations;
 

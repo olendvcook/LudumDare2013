@@ -1,5 +1,8 @@
 #include "Player.h"
 
+static const float mSpeed = 0.5;
+static const float mEnemySpeed = 3;
+
 Player::Player(
 		sf::Vector2f pPosition, 
 		sf::Vector2f pVelocity, 

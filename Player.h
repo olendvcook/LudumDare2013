@@ -4,9 +4,6 @@
 //Extended from AnimatedSprite, also contains player specific stuff for the player
 //TODO: store Variable acceleration? should all sprites have acceleration?
 
-static const float mSpeed = 0.5;
-static const float mMaxSpeed = 3;
-
 class Player :
 	public AnimatedSprite
 {
