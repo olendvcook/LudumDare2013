@@ -1,9 +1,9 @@
 #include "Player.h"
 
 static const float mSpeed = 1.3;
-static const float mMaxSpeed = 5;
 
 Player::Player(
+		Textures* pTextureHolder,
 		sf::Vector2f pPosition, 
 		sf::Vector2f pVelocity, 
 		sf::Vector2i pSize, 
@@ -11,14 +11,17 @@ Player::Player(
 		float pAngle, 
 		float pAngularVelocity) :
 	AnimatedSprite(pPosition, pVelocity, pSize, pTexture, pAngle, pAngularVelocity),
+		mHud(pTextureHolder),
 		mBatteryLevel(5),
 		mPlayerHealth(3)
 {
+
 	isLeft = false;
 	isRight = false;
 	isUp = false;
 	isDown = false;
-	isAttacking = false;
+	isHealthDisplay = false;
+	isBatteryDisplay = false;
 	
 	//add animations idle/walk/jump
 	//animation takes in Number of frames / animation speed / escalator or not
@@ -55,61 +58,63 @@ void Player::reset()
 void Player::update()
 {
 	//player movement example
-	
-	//move right
-	if(isRight && !isLeft)
+	if(!isHealthDisplay && !isBatteryDisplay)
 	{
-		mVelocity.x = mSpeed;
-		mCurrentAnimation = 1;
-		mPLAYERSTATE = pRIGHT;
+		//move right
+		if(isRight && !isLeft)
+		{
+			mVelocity.x = mSpeed;
+			mCurrentAnimation = 1;
+			mPLAYERSTATE = pRIGHT;
+		}
+		//move left
+		else if(isLeft && !isRight)
+		{
+			mVelocity.x = -mSpeed;
+			mCurrentAnimation = 3;
+			mPLAYERSTATE = pLEFT;
+		}
+		//come to a stop
+		else
+		{
+			mVelocity.x = 0;
+		}
+
+		//move up
+		if(isUp && !isDown)
+		{
+			mVelocity.y = -mSpeed;
+			mCurrentAnimation = 0;
+			mPLAYERSTATE = pUP;
+		}
+		//move down
+		else if(isDown && !isUp)
+		{
+			mVelocity.y = mSpeed;
+			mCurrentAnimation = 2;
+			mPLAYERSTATE = pDOWN;
+		}
+		//come to a stop
+		else
+		{
+			mVelocity.y = 0;
+		}
+
+		if(mVelocity.x == 0 && mVelocity.y == 0)
+		{
+			if(mCurrentAnimation == 0)
+				mCurrentAnimation = 4;
+			else if(mCurrentAnimation == 1)
+				mCurrentAnimation = 5;
+			else if(mCurrentAnimation == 2)
+				mCurrentAnimation = 6;
+			else if(mCurrentAnimation == 3)
+				mCurrentAnimation = 7;
+		}
 	}
-	//move left
-	else if(isLeft && !isRight)
-	{
-		mVelocity.x = -mSpeed;
-		mCurrentAnimation = 3;
-		mPLAYERSTATE = pLEFT;
-	}
-	//come to a stop
 	else
 	{
-		mVelocity.x = 0;
-	}
-
-	//move up
-	if(isUp && !isDown)
-	{
-		mVelocity.y = -mSpeed;
-		mCurrentAnimation = 0;
-		mPLAYERSTATE = pUP;
-	}
-	//move down
-	else if(isDown && !isUp)
-	{
-		mVelocity.y = mSpeed;
-		mCurrentAnimation = 2;
-		mPLAYERSTATE = pDOWN;
-	}
-	//come to a stop
-	else
-	{
-		mVelocity.y = 0;
-	}
-
-	if(mVelocity.x == 0 && mVelocity.y == 0)
-	{
-		if(mCurrentAnimation == 0)
-			mCurrentAnimation = 4;
-		else if(mCurrentAnimation == 1)
-			mCurrentAnimation = 5;
-		else if(mCurrentAnimation == 2)
-			mCurrentAnimation = 6;
-		else if(mCurrentAnimation == 3)
-			mCurrentAnimation = 7;
-	}
-
-	if(isAttacking)
-	{
+		mCurrentAnimation = 5;
 		mVelocity.x = 0;
 		mVelocity.y = 0;
 	}
@@ -147,4 +152,14 @@ void Player::update()
 
 	//call superclass update
 	AnimatedSprite::update();
+}
+
+void Player::draw(sf::RenderWindow *window, float pInterpolation)
+{
+	AnimatedSprite::draw(window, pInterpolation);
+
+	if(isHealthDisplay)
+		mHud.draw(window, mPosition.x + mSize.x/2 - mSize.x/3, mPosition.y - mSize.y/2 + mSize.y/3, hHEALTH, mPlayerHealth, mBatteryLevel);
+	else if (isBatteryDisplay)
+		mHud.draw(window, mPosition.x + mSize.x/2 - mSize.x/3, mPosition.y - mSize.y/2 + mSize.y/3, hBATTERY, mPlayerHealth, mBatteryLevel);
 }

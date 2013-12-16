@@ -3,7 +3,7 @@
 //takes in pointer to class that hold spritesheets so entities can be created with certain spritesheet
 Game::Game(Textures *pTextureHolder,  sf::View * pView) :
 	mTextureHolder(pTextureHolder),
-	mPlayer(sf::Vector2f(50,50), sf::Vector2f(0,0), sf::Vector2i(32,32), (pTextureHolder->getTexture(sPLAYER))),
+	mPlayer(pTextureHolder, sf::Vector2f(50,50), sf::Vector2f(0,0), sf::Vector2i(32,32), (pTextureHolder->getTexture(sPLAYER))),
 	mView(pView),
 	mMap(pTextureHolder)
 {
@@ -301,6 +301,15 @@ void Game::input(sf::Event *pEvent)
 			mPlayer.setBatteryLevel(mPlayer.getBatterLevel() -1);
 			}
 		}
+
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+		{
+			mPlayer.setIsHealthDisplay(true);
+		}
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+		{
+			mPlayer.setIsBatteryDisplay(true);
+		}
 		break;
 	case(sf::Event::KeyReleased):
 		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !sf::Keyboard::isKeyPressed(sf::Keyboard::S))
@@ -311,8 +320,10 @@ void Game::input(sf::Event *pEvent)
 			mPlayer.setIsDown(false);
 		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 			mPlayer.setIsUp(false);
-		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-			mPlayer.setIsAttacking(false);
+		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+			mPlayer.setIsHealthDisplay(false);
+		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+			mPlayer.setIsBatteryDisplay(false);
 		break;
 	default:
 		break;

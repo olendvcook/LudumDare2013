@@ -11,7 +11,7 @@ Object::Object(sf::Vector2f pPosition,
 	AnimatedSprite(pPosition, pVelocity, pSize, pTexture, pAngle, pAngularVelocity),
 		mOBJECTTYPE(pOBJECTTYPE)
 {
-	mAnimations.insert(mAnimations.end(), Animation(2, 0.1, false));
+	mAnimations.insert(mAnimations.end(), Animation(2, 2, false));
 	startAnimation();
 }
 
