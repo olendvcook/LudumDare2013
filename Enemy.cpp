@@ -1,6 +1,6 @@
 #include "Enemy.h"
 
-static const float mEnemySpeed = 0.2;
+static const float mEnemySpeed = 0.8;
 
 Enemy::Enemy(sf::Vector2f pPosition,  
 		sf::Vector2i pSize, 
@@ -18,6 +18,10 @@ Enemy::Enemy(sf::Vector2f pPosition,
 	mAnimations.insert(mAnimations.begin(), Animation(8, 0.1, false));
 	mAnimations.insert(mAnimations.begin(), Animation(8, 0.1, false));
 	mAnimations.insert(mAnimations.begin(), Animation(8, 0.1, false));
+	mAnimations.insert(mAnimations.end(), Animation(4, 0.1, false));
+	mAnimations.insert(mAnimations.end(), Animation(4, 0.1, false));
+	mAnimations.insert(mAnimations.end(), Animation(4, 0.1, false));
+	mAnimations.insert(mAnimations.end(), Animation(4, 0.1, false));
 	//start idle animation
 	AnimatedSprite::startAnimation();
 }
@@ -37,13 +41,25 @@ void Enemy::update(sf::Vector2f pPlayerPosition)
 		float angle = atan2f(dy,dx);
 
 		if(angle >= -2.25 && angle <= -.75)
-			setCurrentAnimation(0);
+			if(mVelocity.x == 0 && mVelocity.y == 0)
+				setCurrentAnimation(4);
+			else
+				setCurrentAnimation(0);
 		else if (angle > -.75 && angle <= .75)
-			setCurrentAnimation(1);
+			if(mVelocity.x == 0 && mVelocity.y == 0)
+				setCurrentAnimation(5);
+			else
+				setCurrentAnimation(1);
 		else if (angle >.75 && angle <= 2.25)
-			setCurrentAnimation(2);
+			if(mVelocity.x == 0 && mVelocity.y == 0)
+				setCurrentAnimation(6);
+			else
+				setCurrentAnimation(2);
 		else
-			setCurrentAnimation(3);
+			if(mVelocity.x == 0 && mVelocity.y == 0)
+				setCurrentAnimation(7);
+			else
+				setCurrentAnimation(3);
 
 		if(length <= 100)
 		{
@@ -59,7 +75,6 @@ void Enemy::update(sf::Vector2f pPlayerPosition)
 		{
 			mVelocity.x = 0;
 			mVelocity.y = 0;
-			endAnimation();
 		}
 	}
 

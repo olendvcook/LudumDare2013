@@ -1,7 +1,7 @@
 #include "Player.h"
 
-static const float mSpeed = 0.5;
-static const float mEnemySpeed = 3;
+static const float mSpeed = 1.3;
+static const float mEnemySpeed = 5;
 
 Player::Player(
 		sf::Vector2f pPosition, 
@@ -20,10 +20,14 @@ Player::Player(
 	
 	//add animations idle/walk/jump
 	//animation takes in Number of frames / animation speed / escalator or not
-	mAnimations.insert(mAnimations.begin(), Animation(8, 0.1, false));
-	mAnimations.insert(mAnimations.begin(), Animation(8, 0.1, false));
-	mAnimations.insert(mAnimations.begin(), Animation(8, 0.1, false));
-	mAnimations.insert(mAnimations.begin(), Animation(8, 0.1, false));
+	mAnimations.insert(mAnimations.end(), Animation(8, 0.1, false));
+	mAnimations.insert(mAnimations.end(), Animation(8, 0.1, false));
+	mAnimations.insert(mAnimations.end(), Animation(8, 0.1, false));
+	mAnimations.insert(mAnimations.end(), Animation(8, 0.1, false));
+	mAnimations.insert(mAnimations.end(), Animation(4, 0.1, false));
+	mAnimations.insert(mAnimations.end(), Animation(4, 0.1, false));
+	mAnimations.insert(mAnimations.end(), Animation(4, 0.1, false));
+	mAnimations.insert(mAnimations.end(), Animation(4, 0.1, false));
 
 	//start playing idle animation
 	AnimatedSprite::startAnimation();
@@ -77,11 +81,14 @@ void Player::update()
 
 	if(mVelocity.x == 0 && mVelocity.y == 0)
 	{
-		endAnimation();
-	}
-	else if (!mIsAnimating)
-	{
-		startAnimation();
+		if(mCurrentAnimation == 0)
+			mCurrentAnimation = 4;
+		else if(mCurrentAnimation == 1)
+			mCurrentAnimation = 5;
+		else if(mCurrentAnimation == 2)
+			mCurrentAnimation = 6;
+		else if(mCurrentAnimation == 3)
+			mCurrentAnimation = 7;
 	}
 
 	if(isAttacking)
